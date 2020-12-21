@@ -4,7 +4,7 @@ class CategoryObject {
 
   List<List> articleArray;
   final String category;
-  final String criteria;
+  final List<String> criteria;
   bool isSelected;
 
   void selectCategory() {
@@ -16,4 +16,12 @@ class CategoryObject {
         'criteria': criteria,
         'articleArray': articleArray,
       };
+
+  factory CategoryObject.fromJson(Map<String, dynamic> parsedJson) {
+    return CategoryObject(
+      category: parsedJson['category'],
+      criteria: parsedJson['criteria'],
+      articleArray: parsedJson['articleArray'],
+    );
+  }
 }

@@ -1,10 +1,10 @@
-//TODO: (V2) Set up pinterest style layout - dynamic cell height
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:projest/constants.dart';
+import 'package:projest/models/objects/category_object.dart';
 import 'package:projest/models/objects/project_object.dart';
-import 'package:projest/firebase_helper.dart';
+import 'package:projest/helpers/firebase_helper.dart';
+import 'package:projest/components/tiles/project_tile.dart';
 import 'package:projest/screens/searchprojects/view_user_project_screen.dart';
 
 final _firestore = FirebaseFirestore.instance;
@@ -19,122 +19,289 @@ class SearchProjectsScreen extends StatefulWidget {
 }
 
 class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
-  final messageTextController = TextEditingController();
-  String messageText;
+  TextEditingController _searchQueryController = TextEditingController();
+  bool _isSearching = false;
+  String searchQuery = "Search Query";
+  List<ProjectObject> projects = [];
+  List<ProjectTile> listTiles = [];
+  List<Text> tabs;
 
   @override
   void initState() {
+    tabs = _buildTabs();
+
     super.initState();
     authHelper = FirebaseAuthHelper();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ProjectStream(),
-    );
-  }
-}
+    tabs = _buildTabs();
 
-class ProjectStream extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      //TODO: Only show projects with Auth UID
-      stream: _firestore.collection('Projects').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData == true) {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
-            ),
-          );
-        }
-        final projects = snapshot.data.docs.reversed;
-        List<ProjectTile> projectList = [];
-        for (var project in projects) {
-          final projectThumbnail = project.data()['thumbnailLink'];
-          final projectTitle = project.data()['title'];
-          final projectDescription = project.data()['description'];
-          final projectFeedbackArray = project.data()['feedbackArray'];
-          final projectCategory = project.data()['category'];
-          final pUid = project.data()['uid'];
-          final profileImageLink = project.data()['profileImageLink'];
-
-          final pObject = ProjectObject(
-            title: projectTitle,
-            category: projectCategory,
-            description: projectDescription,
-            projectOwnerUsername: authHelper.auth.currentUser.email,
-            thumbnailLink: projectThumbnail,
-            feedbackArray: projectFeedbackArray,
-            uid: pUid,
-            profileImageLink: profileImageLink,
-          );
-
-          if (pObject.uid != authHelper.auth.currentUser.uid) {
-            final p = ProjectTile(
-              project: pObject,
-            );
-            projectList.add(p);
-          }
-        }
-        return ListView(
-          padding: EdgeInsets.symmetric(horizontal: 12.5, vertical: 12.5),
-          children: projectList,
-          itemExtent: 83,
-        );
-      },
-    );
-  }
-}
-
-class ProjectTile extends StatelessWidget {
-  ProjectTile({this.project});
-  final ProjectObject project;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 15,
-      child: ListTile(
-        onTap: () {
-          //TODO: Change to view users project instead of view my project
-
-          Navigator.pushNamed(context, ViewUserProjectScreen.id,
-              arguments: project);
-        },
-        contentPadding: EdgeInsets.all(2),
-        trailing: Icon(
-          project.checkForUnratedFeedback()
-              ? Icons.notifications
-              : Icons.notifications_none,
-          size: 45,
-          color: project.checkForUnratedFeedback()
-              ? kLightOrangeCompliment
-              : Colors.grey.withOpacity(0.25),
+    return DefaultTabController(
+      length: FirebaseAuthHelper.loggedInUser.interestArray.length + 1,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          leading: _isSearching ? const BackButton() : Container(),
+          title: _isSearching ? _buildSearchField() : Text('Search Projects'),
+          actions: _buildActions(),
+          bottom: _buildTabBar(),
         ),
-        leading: Image(
-          image: NetworkImage(project.thumbnailLink),
-          height: 75,
-          width: 120,
-        ),
-        title: Text(
-          project.title,
-          style: TextStyle(
-            fontSize: 25,
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        subtitle: Text(
-          project.description,
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.w200,
-          ),
+        body: TabBarView(
+          children: buildTabViews(),
         ),
       ),
     );
+  }
+
+  TabBar _buildTabBar() {
+    TabBar tBar = TabBar(
+      labelPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 7.5),
+      unselectedLabelColor: Colors.white70,
+      labelColor: kPrimaryColor,
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: Colors.white),
+      isScrollable: true,
+      tabs: tabs,
+    );
+
+    return tBar;
+  }
+
+  List<Text> _buildTabs() {
+    List<Text> tabs = [];
+    tabs.add(
+      Text(
+        'All',
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+
+    for (var c in FirebaseAuthHelper.loggedInUser.interestArray) {
+      CategoryObject cat = CategoryObject.fromJson(c);
+      tabs.add(
+        Text(
+          cat.category,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    }
+
+    return tabs;
+  }
+
+  List<ProjectTile> filteredProjectTiles(String query) {
+    List<ProjectTile> filtered = [];
+
+    for (ProjectObject p in projects) {
+      if (p.title.contains(query)) {
+        filtered.add(ProjectTile(
+          state: ProjectTileState.viewingUserProject,
+          project: p,
+          onTap: () {
+            ViewUserProjectScreen.p = p;
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewUserProjectScreen(),
+              ),
+            );
+          },
+        ));
+      }
+    }
+
+    return filtered;
+  }
+
+  List<Widget> buildTabViews() {
+    List<Widget> widgets = [];
+
+    widgets.add(
+      StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection('Projects').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData == true) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.lightBlueAccent,
+              ),
+            );
+          }
+          final snapshots = snapshot.data.docs.reversed;
+
+          projects = [];
+          listTiles = [];
+
+          for (var snapshot in snapshots) {
+            final pObject = ProjectObject.fromJson(snapshot.data());
+
+            if (pObject.uid != authHelper.auth.currentUser.uid &&
+                FirebaseAuthHelper.loggedInUser.blockedUsersUid
+                        .contains(pObject.uid) ==
+                    false &&
+                pObject.flaggedByUid
+                        .contains(FirebaseAuthHelper.loggedInUser.uid) ==
+                    false) {
+              projects.add(pObject);
+
+              final p = ProjectTile(
+                state: ProjectTileState.viewingUserProject,
+                project: pObject,
+                onTap: () async {
+                  ViewUserProjectScreen.p = pObject;
+                  await Navigator.pushNamed(context, ViewUserProjectScreen.id);
+                  setState(() {});
+                },
+              );
+              listTiles.add(p);
+            }
+          }
+          return ListView(
+            padding: EdgeInsets.symmetric(horizontal: 12.5, vertical: 12.5),
+            children: _isSearching == false
+                ? listTiles
+                : filteredProjectTiles(searchQuery),
+            itemExtent: 80,
+          );
+        },
+      ),
+    );
+
+    for (var c in FirebaseAuthHelper.loggedInUser.interestArray) {
+      String cat = c['category'];
+
+      widgets.add(StreamBuilder<QuerySnapshot>(
+        stream: _firestore
+            .collection('Projects')
+            .where('category', isEqualTo: cat)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData == true) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.lightBlueAccent,
+              ),
+            );
+          }
+          final snapshots = snapshot.data.docs.reversed;
+
+          projects = [];
+          listTiles = [];
+
+          for (var snapshot in snapshots) {
+            final pObject = ProjectObject.fromJson(snapshot.data());
+
+            projects.add(pObject);
+
+            if (pObject.uid != authHelper.auth.currentUser.uid &&
+                FirebaseAuthHelper.loggedInUser.blockedUsersUid
+                        .contains(pObject.uid) ==
+                    false &&
+                pObject.flaggedByUid
+                        .contains(FirebaseAuthHelper.loggedInUser.uid) ==
+                    false) {
+              final p = ProjectTile(
+                state: ProjectTileState.viewingUserProject,
+                project: pObject,
+                onTap: () async {
+                  ViewUserProjectScreen.p = pObject;
+                  await Navigator.pushNamed(context, ViewUserProjectScreen.id);
+                  setState(() {});
+                },
+              );
+              listTiles.add(p);
+            }
+          }
+          return ListView(
+            padding: EdgeInsets.symmetric(horizontal: 12.5, vertical: 12.5),
+            children: _isSearching == false
+                ? listTiles
+                : filteredProjectTiles(searchQuery),
+            itemExtent: 80,
+          );
+        },
+      ));
+    }
+
+    return widgets;
+  }
+
+  Widget _buildSearchField() {
+    return TextField(
+      controller: _searchQueryController,
+      autofocus: true,
+      cursorColor: Colors.white24,
+      decoration: InputDecoration(
+        hintText: "Search Projects...",
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.white.withOpacity(.9)),
+      ),
+      style: TextStyle(color: Colors.white, fontSize: 16.0),
+      onChanged: (query) => updateSearchQuery(query),
+    );
+  }
+
+  List<Widget> _buildActions() {
+    if (_isSearching) {
+      return <Widget>[
+        IconButton(
+          icon: const Icon(Icons.clear),
+          onPressed: () {
+            if (_searchQueryController == null ||
+                _searchQueryController.text.isEmpty) {
+              Navigator.pop(context);
+              return;
+            }
+            _clearSearchQuery();
+          },
+        ),
+      ];
+    }
+
+    return <Widget>[
+      IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: _startSearch,
+      ),
+    ];
+  }
+
+  void _startSearch() {
+    ModalRoute.of(context)
+        .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
+
+    listTiles = [];
+
+    setState(() {
+      _isSearching = true;
+    });
+  }
+
+  void updateSearchQuery(String newQuery) {
+    setState(() {
+      searchQuery = newQuery;
+    });
+  }
+
+  void _stopSearching() {
+    _clearSearchQuery();
+    setState(() {
+      _isSearching = false;
+    });
+  }
+
+  void _clearSearchQuery() {
+    setState(() {
+      _searchQueryController.clear();
+      updateSearchQuery("");
+    });
   }
 }

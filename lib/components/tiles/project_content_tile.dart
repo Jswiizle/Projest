@@ -4,20 +4,53 @@ import 'package:projest/models/objects/blip_object.dart';
 class ProjectContentTile extends StatelessWidget {
   final BlipObject blipObject;
   final Function onTap;
-  final Function onSlideToLeft;
 
-  ProjectContentTile({this.blipObject, this.onTap, this.onSlideToLeft});
+  ProjectContentTile({this.blipObject, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      onHorizontalDragEnd: onSlideToLeft,
       child: Card(
-        elevation: 10,
-        child: Container(
-          padding: EdgeInsets.all(8),
-          child: blipObject.temporaryImage,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        elevation: 4,
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  blipObject.title ?? "",
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  blipObject.description ?? "",
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w200,
+                    color: Colors.black45,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          trailing: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              blipObject.url != null && blipObject.url != ""
+                  ? Icons.link_rounded
+                  : Icons.image,
+              color: Colors.black,
+              size: 45,
+            ),
+          ),
         ),
       ),
     );

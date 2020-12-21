@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:projest/constants.dart';
-import 'package:projest/models/objects/category_object.dart';
+import 'package:projest/models/objects/project_complaint_reason_object.dart';
 
-class CategoryTile extends StatelessWidget {
-  final CategoryObject category;
+class ProjectComplaintReasonTile extends StatelessWidget {
+  final ProjectComplaintReasonObject reason;
   final Function checkboxCallback;
 
-  CategoryTile({
-    this.category,
+  ProjectComplaintReasonTile({
+    this.reason,
     this.checkboxCallback,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(category.category),
+      title: Text(reason.reason),
       trailing: Checkbox(
-        value: category.isSelected,
+        value: reason.isSelected,
         onChanged: checkboxCallback,
         activeColor: kPrimaryColor,
       ),

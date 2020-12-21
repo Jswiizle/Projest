@@ -21,57 +21,59 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              height: 180,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'Projest',
-                    style: TextStyle(
-                      fontSize: 90.0,
-                      fontFamily: 'LobsterTwo',
-                      fontWeight: FontWeight.w700,
-                      color: kDarkBlueCompliment,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 180,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      'Projest',
+                      style: TextStyle(
+                        fontSize: 90.0,
+                        fontFamily: 'LobsterTwo',
+                        fontWeight: FontWeight.w700,
+                        color: kDarkBlueCompliment,
+                      ),
                     ),
                   ),
-                ),
-                Hero(
-                  tag: 'logo',
-                  child: Image(
-                    image: AssetImage('images/logo.png'),
-                    height: 90,
-                    width: 90,
+                  Hero(
+                    tag: 'logo',
+                    child: Image(
+                      image: AssetImage('images/logo.png'),
+                      height: 90,
+                      width: 90,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            RoundedButton(
-              color: kPrimaryColor,
-              title: 'Login',
-              onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
-              },
-            ),
-            RoundedButton(
-              color: kDarkBlueCompliment,
-              title: 'Register',
-              onPressed: () {
-                Navigator.pushNamed(context, RegistrationScreen.id);
-              },
-            )
-          ],
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              RoundedButton(
+                color: kPrimaryColor,
+                title: 'Login',
+                onPressed: () {
+                  Navigator.pushNamed(context, LoginScreen.id);
+                },
+              ),
+              RoundedButton(
+                color: kDarkBlueCompliment,
+                title: 'Register',
+                onPressed: () {
+                  Navigator.pushNamed(context, RegistrationScreen.id);
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

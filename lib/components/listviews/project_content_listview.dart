@@ -1,43 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:projest/components/tiles/category_tile.dart';
-import 'package:projest/models/objects/category_object.dart';
+import 'package:projest/components/tiles/project_content_tile.dart';
+import 'package:projest/components/tiles/add_project_content_tile.dart';
 
-class ProjectContentListview extends StatefulWidget {
-  @override
-  _ProjectContentListviewState createState() => _ProjectContentListviewState();
+class ProjectContentListView extends StatelessWidget {
+  ProjectContentListView(
+      {@required this.listViewContent,
+      @required this.onAddImagePressed,
+      @required this.onAddLinkPressed});
 
-  final ValueChanged<List<CategoryObject>> onCategoriesChanged;
-  ProjectContentListview({this.onCategoriesChanged});
-}
-
-class _ProjectContentListviewState extends State<ProjectContentListview> {
-  List<CategoryObject> interests = [
-    CategoryObject(category: 'Music', isSelected: false),
-    CategoryObject(category: 'Art', isSelected: false),
-    CategoryObject(category: 'Coding', isSelected: false),
-    CategoryObject(category: 'Marketing', isSelected: false),
-    CategoryObject(category: 'Podcasting', isSelected: false),
-    CategoryObject(category: 'Design', isSelected: false),
-    CategoryObject(category: 'Video', isSelected: false),
-    CategoryObject(category: 'Writing', isSelected: false),
-  ];
+  final List<ProjectContentTile> listViewContent;
+  final Function onAddImagePressed;
+  final Function onAddLinkPressed;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        return CategoryTile(
-          isChecked: interests[index].isSelected,
-          category: interests[index],
-          checkboxCallback: (bool checkBoxState) {
-            setState(() {
-              interests[index].selectCategory();
-              widget.onCategoriesChanged(interests);
-            });
-          },
-        );
+        if (index != listViewContent.length) {
+          return listViewContent[index];
+        } else {
+          return AddProjectContentTile(
+            onAddImagePressed: onAddImagePressed,
+            onAddUrlPressed: onAddLinkPressed,
+          );
+        }
       },
-      itemCount: interests.length,
+      itemCount: listViewContent.length + 1,
     );
   }
 }

@@ -1,0 +1,235 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:projest/components/buttons/rounded_button.dart';
+import 'package:projest/helpers/firebase_helper.dart';
+import 'package:projest/models/objects/project_object.dart';
+import 'package:projest/models/objects/feedback_object.dart';
+import 'package:projest/models/objects/feedback_criteria_object.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:projest/constants.dart';
+import 'package:uuid/uuid.dart';
+import 'package:projest/screens/searchprojects/view_user_project_screen.dart';
+
+class SubmitFeedbackScreen extends StatefulWidget {
+  SubmitFeedbackScreen({this.p, this.submittedFeedbackCallback});
+
+  final ProjectObject p;
+  final Function submittedFeedbackCallback;
+  static int secondsViewed = 0;
+  static List<FeedbackCriteriaObject> criteria;
+
+  @override
+  _SubmitFeedbackScreenState createState() => _SubmitFeedbackScreenState();
+}
+
+class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
+  @override
+  void initState() {
+    if (SubmitFeedbackScreen.criteria == null) {
+      SubmitFeedbackScreen.criteria = getFeedbackCriteria();
+    }
+    super.initState();
+  }
+
+  List<Text> createTimeDisplay() {
+    List<Text> textDisplay = [];
+
+    if (SubmitFeedbackScreen.secondsViewed < 60) {
+      textDisplay.add(Text(
+        SubmitFeedbackScreen.secondsViewed.toString(),
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+      ));
+      textDisplay.add(Text(
+        'Seconds',
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ));
+    } else {
+      textDisplay.add(Text(
+        (SubmitFeedbackScreen.secondsViewed / 60).truncate().toString(),
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
+      ));
+      textDisplay.add(Text(
+        SubmitFeedbackScreen.secondsViewed < 120 ? 'Minute' : 'Minutes',
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ));
+    }
+
+    return textDisplay;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5, 15, 5),
+            child: Column(
+              children: createTimeDisplay(),
+            ),
+          ),
+        ],
+        backgroundColor: kPrimaryColor,
+        title: Text('Submit Feedback'),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(10.0),
+              itemCount: SubmitFeedbackScreen.criteria.length,
+              itemBuilder: (context, i) {
+                return Card(
+                  elevation: 10.0,
+                  child: ExpansionTile(
+                    title: Row(
+                      children: <Widget>[
+                        Text(
+                          SubmitFeedbackScreen.criteria[i].criteria,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 12.5,
+                        ),
+                      ],
+                    ),
+                    children: <Widget>[
+                      new Column(
+                        children: _buildExpandableContent(
+                            SubmitFeedbackScreen.criteria[i]),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: RoundedButton(
+              title: 'Submit',
+              color: kPrimaryColor,
+              onPressed: () async {
+                widget.p.feedbackArray = [];
+                widget.p.feedbackArray.add(createFeedbackObject().toJson());
+                ViewUserProjectScreen.p = widget.p;
+                FirestoreHelper helper = FirestoreHelper();
+                await helper.updateProject(widget.p);
+                Navigator.pop(context);
+                widget.submittedFeedbackCallback();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  FeedbackObject createFeedbackObject() {
+    List<Map<String, dynamic>> criteriaArray = [];
+
+    for (FeedbackCriteriaObject f in SubmitFeedbackScreen.criteria) {
+      criteriaArray.add(f.toJson());
+    }
+
+    return FeedbackObject(
+      projectImageUrl: widget.p.profileImageLink,
+      projectTitle: widget.p.title,
+      senderProfileImageUrl: FirebaseAuthHelper.loggedInUser.profileImageLink,
+      senderId: FirebaseAuthHelper.loggedInUser.uid,
+      senderUsername: FirebaseAuthHelper.loggedInUser.username,
+      boosted: widget.p.checkIfProjectIsBoosted(),
+      feedback: criteriaArray,
+      ratedHelpful: false,
+      id: Uuid().v4(),
+      rated: false,
+      timeStamp: Timestamp.now(),
+      uid: widget.p.uid,
+      timeSpentReviewing: SubmitFeedbackScreen.secondsViewed,
+    );
+  }
+
+  List<FeedbackCriteriaObject> getFeedbackCriteria() {
+    List<FeedbackCriteriaObject> c = [];
+
+    int index = 0;
+
+    for (String criteria in widget.p.selectedCriteria) {
+      c.add(FeedbackCriteriaObject(
+          criteria: criteria, text: "", rating: 0, index: index));
+
+      index = index + 1;
+    }
+
+    return c;
+  }
+
+  List<Widget> _buildExpandableContent(FeedbackCriteriaObject criteriaItem) {
+    return [
+      Padding(
+        padding: const EdgeInsets.only(right: 15, left: 15, bottom: 15),
+        child: Column(
+          children: [
+            TextField(
+              maxLines: 6,
+              textInputAction: TextInputAction.done,
+              controller: TextEditingController.fromValue(
+                TextEditingValue(
+                    text: criteriaItem.text,
+                    selection: TextSelection.fromPosition(
+                        TextPosition(offset: criteriaItem.text.length))),
+              ),
+              decoration: kTextFieldDecoration,
+              onChanged: (value) {
+                SubmitFeedbackScreen.criteria[criteriaItem.index].text = value;
+              },
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            RatingBar(
+              itemCount: 5,
+              itemSize: 50,
+              allowHalfRating: false,
+              initialRating:
+                  SubmitFeedbackScreen.criteria[criteriaItem.index].rating,
+              ratingWidget: RatingWidget(
+                full: Icon(
+                  Icons.star,
+                  color: Colors.orange,
+                ),
+                empty: Icon(Icons.star_border, color: kLightOrangeCompliment),
+              ),
+              direction: Axis.horizontal,
+              onRatingUpdate: (value) {
+                setState(() {
+                  print(
+                      'Viewed for ${SubmitFeedbackScreen.secondsViewed} seconds');
+                  SubmitFeedbackScreen.criteria[criteriaItem.index].rating =
+                      value;
+                });
+              },
+            )
+          ],
+        ),
+      ),
+    ];
+  }
+}

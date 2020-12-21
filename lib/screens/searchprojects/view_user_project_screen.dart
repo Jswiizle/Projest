@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:projest/helpers/firebase_helper.dart';
 import 'package:projest/models/objects/project_object.dart';
 import 'package:projest/constants.dart';
 import 'package:projest/components/buttons/rounded_button.dart';
+import 'package:projest/components/listviews/project_contributor_listview.dart';
+import 'package:projest/screens/misc/view_project_content_screen.dart';
+import 'package:projest/components/listviews/submit_project_complaint_listview.dart';
+import 'package:projest/models/objects/project_complaint_reason_object.dart';
+import 'package:projest/models/objects/project_complaint_object.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 class ViewUserProjectScreen extends StatefulWidget {
-  ViewUserProjectScreen();
+  static ProjectObject p;
 
   static const String id = 'view_user_project_screen';
 
@@ -14,14 +22,35 @@ class ViewUserProjectScreen extends StatefulWidget {
 }
 
 class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
+  ImageProvider provider;
+  List<ProjectComplaintReasonObject> reasons = [];
+  String complaintText;
+
   @override
   Widget build(BuildContext context) {
-    final ProjectObject p = ModalRoute.of(context).settings.arguments;
+    provider = ViewUserProjectScreen.p.thumbnailLink != null &&
+            ViewUserProjectScreen.p.thumbnailLink != ""
+        ? NetworkImage(ViewUserProjectScreen.p.thumbnailLink)
+        : AssetImage('images/default.png');
 
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: GestureDetector(
+              onTap: () async {
+                await _presentFlagProjectAlert();
+              },
+              child: Icon(
+                Icons.flag_rounded,
+                size: 35,
+              ),
+            ),
+          ),
+        ],
         backgroundColor: kPrimaryColor,
-        title: Text(p.title),
+        title: Text(ViewUserProjectScreen.p.title),
       ),
       body: SafeArea(
         child: Column(
@@ -34,7 +63,7 @@ class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
                 child: Card(
                   elevation: 8,
                   child: Image(
-                    image: NetworkImage(p.thumbnailLink),
+                    image: provider,
                     width: 320,
                     height: 180,
                     fit: BoxFit.fill,
@@ -59,29 +88,57 @@ class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    p.description,
+                    ViewUserProjectScreen.p.description,
                     style: TextStyle(fontFamily: 'Roboto', fontSize: 16),
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
+              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 5),
               child: Text(
                 'Project Contributors',
                 style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700),
+                  fontFamily: 'Roboto',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-            Expanded(child: ProjectCreatorList(project: p)),
+            Container(
+              height: 150,
+              child: ProjectContributorList(
+                project: ViewUserProjectScreen.p,
+              ),
+            ),
             Expanded(child: SizedBox()),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
               child: RoundedButton(
-                title: 'Review Project',
+                title: ViewUserProjectScreen.p.checkIfUserHasSubmittedFeedback()
+                    ? 'View Project'
+                    : 'Review Project',
                 color: kPrimaryColor,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewProjectContentScreen(
+                          submittedFeedbackCallback: () {
+                            setState(() {});
+                          },
+                          p: ViewUserProjectScreen.p,
+                          state: ViewUserProjectScreen.p
+                                      .checkIfUserHasSubmittedFeedback() ==
+                                  true
+                              ? ViewProjectContentScreenState
+                                  .viewingUserProjectContentRated
+                              : ViewProjectContentScreenState
+                                  .viewingUserProjectContentUnrated),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -89,71 +146,101 @@ class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
       ),
     );
   }
-}
 
-class ProjectCreatorList extends StatelessWidget {
-  ProjectCreatorList({@required this.project});
+  Future<void> _presentFlagProjectAlert() async {
+    SubmitProjectComplaintListView listView = SubmitProjectComplaintListView(
+      onProjectComplaintReasonsChange: (newReasons) {
+        List<ProjectComplaintReasonObject> selectedReasons = [];
 
-  final ProjectObject project;
+        for (ProjectComplaintReasonObject reason in newReasons) {
+          if (reason.isSelected) {
+            selectedReasons.add(reason);
+          }
+        }
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: (VX) Allow users to add multiple project contributors
-
-    List<ProjectCreatorTile> tiles = [];
-
-    tiles.add(ProjectCreatorTile(project: project));
-
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 20.0),
-      shrinkWrap: true,
-      children: tiles,
+        reasons = selectedReasons;
+      },
     );
-  }
-}
 
-class ProjectCreatorTile extends StatelessWidget {
-  ProjectCreatorTile({this.project});
-  final ProjectObject project;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        height: 150,
-        width: 150,
-        child: Card(
-          elevation: 8,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(project.profileImageLink),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  project.projectOwnerUsername,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text(
+            'Submit Project Complaint',
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w900,
             ),
           ),
-        ),
-      ),
+          children: [
+            Container(
+              width: 200,
+              height: 225,
+              child: listView,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.multiline,
+                maxLines: 6,
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'Enter additional information',
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                ),
+                onChanged: (c) {
+                  complaintText = c;
+                },
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 2.5),
+              child: RoundedButton(
+                title: 'Submit',
+                color: kPrimaryColor,
+                onPressed: () async {
+                  await submitProjectComplaint();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  Future<void> submitProjectComplaint() async {
+    if (ViewUserProjectScreen.p.flaggedByUid == null) {
+      ViewUserProjectScreen.p.flaggedByUid = [];
+    }
+
+    ProjectComplaintObject object = ProjectComplaintObject(
+      id: Uuid().v4(),
+      timestamp: Timestamp.now(),
+      text: complaintText,
+      reasons: reasons,
+      complaineeUid: ViewUserProjectScreen.p.uid,
+      complainerUid: FirebaseAuthHelper.loggedInUser.uid,
+      projectId: ViewUserProjectScreen.p.id,
+      projectThumbnailUrl: ViewUserProjectScreen.p.thumbnailLink,
+      projectTitle: ViewUserProjectScreen.p.title,
+      projectDescription: ViewUserProjectScreen.p.description,
+    );
+
+    ViewUserProjectScreen.p.flaggedByUid
+        .add(FirebaseAuthHelper.loggedInUser.uid);
+    FirebaseAuthHelper.loggedInUser.projectComplaintIdArray.add(object.id);
+
+    FirestoreHelper helper = FirestoreHelper();
+
+    await helper.submitProjectComplaint(object);
+    await helper.updateProject(ViewUserProjectScreen.p);
+    await helper.updateCurrentUser();
   }
 }

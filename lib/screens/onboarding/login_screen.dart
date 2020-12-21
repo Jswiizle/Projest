@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:projest/components/buttons/rounded_button.dart';
 import 'package:projest/constants.dart';
-import 'package:projest/screens/main_tab_controller.dart';
-import 'package:projest/firebase_helper.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:projest/alert_helper.dart';
+import 'package:projest/screens/misc/main_tab_controller.dart';
+import 'package:projest/helpers/firebase_helper.dart';
+import 'package:projest/helpers/alert_helper.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -16,8 +15,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool showSpinner = false;
-  String email;
-  String password;
+  String email = '';
+  String password = '';
 
   _login() async {
     final status =
@@ -58,18 +57,20 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              SizedBox(
+                height: 50,
+              ),
               Hero(
                 tag: 'logo',
                 child: Container(
-                  height: 200.0,
+                  height: 100.0,
                   child: Image.asset('images/logo.png'),
                 ),
               ),
               SizedBox(
-                height: 48.0,
+                height: 40.0,
               ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
@@ -81,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     kTextFieldDecoration.copyWith(hintText: 'Enter Your Email'),
               ),
               SizedBox(
-                height: 8.0,
+                height: 10.0,
               ),
               TextField(
                 obscureText: true,
@@ -99,8 +100,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: kPrimaryColor,
                 title: 'Login',
                 onPressed: () async {
-                  toggleSpinner();
-                  _login();
+                  if (canLogin() == true) {
+                    toggleSpinner();
+                    _login();
+                  } else {
+                    AlertHelper helper = AlertHelper(
+                        title: 'Invalid Credentials',
+                        body: 'Please enter valid credentials');
+                    helper.generateAlert(context);
+                  }
                 },
               ),
             ],
@@ -108,5 +116,15 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  bool canLogin() {
+    if (password.characters.length >= 6 &&
+        email.contains('@') &&
+        email.contains('.')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

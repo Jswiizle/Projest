@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:projest/alert_helper.dart';
+import 'package:projest/helpers/alert_helper.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:projest/constants.dart';
 import 'package:projest/components/buttons/rounded_button.dart';
-import 'package:projest/firebase_helper.dart';
+import 'package:projest/helpers/firebase_helper.dart';
 import 'package:projest/models/objects/user_object.dart';
-import 'package:projest/screens/main_tab_controller.dart';
+import 'package:projest/screens/misc/main_tab_controller.dart';
 import 'package:projest/models/objects/category_object.dart';
 import 'package:projest/components/listviews/category_listview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,13 +35,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool showSpinner = false;
   String email;
   String password;
+  String name;
 
   List<CategoryObject> categories;
 
   Future<void> _gatherUserInterests() async {
-    CategoryListview listview = CategoryListview(
+    CategoryListView listview = CategoryListView(
+      state: CategoryListViewState.multiple,
       onCategoriesChanged: (newCategories) {
-        categories = newCategories;
+        List<CategoryObject> selectedCategories = [];
+
+        for (CategoryObject c in newCategories) {
+          if (c.isSelected) {
+            selectedCategories.add(c);
+          }
+        }
+
+        categories = selectedCategories;
       },
     );
 
@@ -70,14 +80,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 title: 'Done',
                 color: kPrimaryColor,
                 onPressed: () {
-                  // TODO: Filter the password to ensure it meets standards
-
                   Navigator.pop(context);
-
-                  for (CategoryObject c in categories) {
-                    print('${c.category} toggle status is ${c.isSelected}');
-                  }
-
                   _createAccount();
                 },
               ),
@@ -88,6 +91,52 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
+  bool passwordIsSufficient() {
+    if (password.length < 6) {
+      AlertHelper helper = AlertHelper(
+          choice1: 'Ok',
+          title: 'Insufficent Password',
+          body: 'Please ensure your password is at least 6 characters');
+      helper.generateAlert(context);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool emailIsSufficient() {
+    bool sufficient;
+
+    if (email.contains('@') && email.length > 1) {
+      sufficient = true;
+    } else {
+      sufficient = false;
+      AlertHelper helper = AlertHelper(
+          choice1: 'Ok',
+          title: 'Insufficient Email',
+          body: 'Please ensure your email address is valid');
+      helper.generateAlert(context);
+    }
+
+    return sufficient;
+  }
+
+  bool nameIsSufficient() {
+    bool _sufficient;
+
+    if (name.length > 1) {
+      _sufficient = true;
+    } else {
+      AlertHelper helper = AlertHelper(
+          choice1: 'Ok',
+          title: 'Insufficient Name',
+          body: 'Please ensure your name is at least 1 character');
+      helper.generateAlert(context);
+    }
+
+    return _sufficient;
+  }
+
   _toggleSpinner() {
     setState(() {
       showSpinner = !showSpinner;
@@ -95,25 +144,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   _createAccount() async {
+    _toggleSpinner();
+
     final status =
-        await _authHelper.createAccount(email: email, pass: password);
+        await FirebaseAuthHelper().createAccount(email: email, pass: password);
     if (status == AuthResultStatus.successful) {
       UserObject newUserObject = UserObject(
         uid: _authHelper.auth.currentUser.uid,
         interestArray: _convertInterestsToJson(categories),
         password: password,
         email: email,
+        credits: 0,
         points: 0,
         earlyAdopter: false,
-        joinDate: DateTime.now(),
+        joinDate: Timestamp.now(),
+        username: name,
+        blockedByUid: [],
+        blockedUsersUid: [],
       );
-
-      // TODO: Await auth sign up / create user in database
 
       await _firestore
           .collection('Users')
           .doc(_authHelper.auth.currentUser.uid)
           .set(newUserObject.toJson());
+
+      FirebaseAuthHelper.loggedInUser = newUserObject;
 
       _toggleSpinner();
 
@@ -144,20 +199,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              SizedBox(
+                height: 50,
+              ),
               Flexible(
                 child: Hero(
                   tag: 'logo',
                   child: Container(
-                    height: 225.0,
+                    height: 100.0,
                     child: Image.asset('images/logo.png'),
                   ),
                 ),
               ),
               SizedBox(
-                height: 48.0,
+                height: 40.0,
+              ),
+              TextField(
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  name = value;
+                },
+                decoration:
+                    kTextFieldDecoration.copyWith(hintText: 'Enter your name'),
+              ),
+              SizedBox(
+                height: 10.0,
               ),
               TextField(
                   keyboardType: TextInputType.emailAddress,
@@ -168,7 +236,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter your email')),
               SizedBox(
-                height: 8.0,
+                height: 10.0,
               ),
               TextField(
                 obscureText: true,
@@ -186,8 +254,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 color: kDarkBlueCompliment,
                 title: 'Register',
                 onPressed: () async {
-                  _toggleSpinner();
-                  _gatherUserInterests();
+                  if (passwordIsSufficient() &&
+                      emailIsSufficient() &&
+                      nameIsSufficient()) {
+                    _gatherUserInterests();
+                  }
                 },
               ),
             ],

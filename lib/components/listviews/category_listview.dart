@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:projest/components/tiles/category_tile.dart';
 import 'package:projest/models/objects/category_object.dart';
 
-class CategoryListview extends StatefulWidget {
+class CategoryListView extends StatefulWidget {
   @override
-  _CategoryListviewState createState() => _CategoryListviewState();
+  _CategoryListViewState createState() => _CategoryListViewState();
 
   final ValueChanged<List<CategoryObject>> onCategoriesChanged;
-  CategoryListview({this.onCategoriesChanged});
+  final CategoryListViewState state;
+  CategoryListView({this.onCategoriesChanged, this.state});
 }
 
-class _CategoryListviewState extends State<CategoryListview> {
+class _CategoryListViewState extends State<CategoryListView> {
   List<CategoryObject> interests = [
     CategoryObject(category: 'Music', isSelected: false),
     CategoryObject(category: 'Art', isSelected: false),
@@ -27,11 +28,17 @@ class _CategoryListviewState extends State<CategoryListview> {
     return ListView.builder(
       itemBuilder: (context, index) {
         return CategoryTile(
-          isChecked: interests[index].isSelected,
           category: interests[index],
           checkboxCallback: (bool checkBoxState) {
             setState(() {
+              if (widget.state == CategoryListViewState.single) {
+                for (var i in interests) {
+                  i.isSelected = false;
+                }
+              }
+
               interests[index].selectCategory();
+
               widget.onCategoriesChanged(interests);
             });
           },
@@ -41,3 +48,5 @@ class _CategoryListviewState extends State<CategoryListview> {
     );
   }
 }
+
+enum CategoryListViewState { single, multiple }
