@@ -43,7 +43,7 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
         ),
       ));
       textDisplay.add(Text(
-        'Seconds',
+        SubmitFeedbackScreen.secondsViewed != 1 ? 'Seconds' : 'Second',
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -72,6 +72,7 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         actions: [
           Padding(
@@ -120,9 +121,8 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
               },
             ),
           ),
-          SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: RoundedButton(
               title: 'Submit',
               color: kPrimaryColor,
@@ -219,9 +219,10 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
               ),
               direction: Axis.horizontal,
               onRatingUpdate: (value) {
+
+                FocusScope.of(context).unfocus();
+
                 setState(() {
-                  print(
-                      'Viewed for ${SubmitFeedbackScreen.secondsViewed} seconds');
                   SubmitFeedbackScreen.criteria[criteriaItem.index].rating =
                       value;
                 });

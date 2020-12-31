@@ -12,7 +12,7 @@ class ProjectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2.5,
+      elevation: 2,
       child: ListTile(
         contentPadding: EdgeInsets.only(right: 6),
         onTap: onTap,
@@ -41,14 +41,17 @@ class ProjectTile extends StatelessWidget {
           project.title,
           maxLines: 1,
           style: TextStyle(
-            fontSize: 22.5,
+            fontSize: 18,
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w700,
           ),
         ),
         subtitle: Text(
           project.description,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
+            fontSize: 14,
             fontFamily: 'Roboto',
             fontWeight: FontWeight.w200,
           ),
@@ -66,7 +69,7 @@ class ProjectTile extends StatelessWidget {
           project.checkForUnratedFeedback()
               ? Icons.notifications
               : Icons.notifications_none,
-          size: 40,
+          size: 32.5,
           color: project.checkForUnratedFeedback()
               ? kLightOrangeCompliment
               : Colors.grey.withOpacity(0.25),
@@ -90,13 +93,15 @@ class ProjectTile extends StatelessWidget {
             Text(
               createPointsToGiveString(),
               style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 15,
                   fontWeight: FontWeight.w800,
                   color: Colors.black26),
             ),
           ],
         );
         break;
+      default: break;
+
     }
 
     return trailing;
@@ -172,4 +177,4 @@ class ProjectTile extends StatelessWidget {
   }
 }
 
-enum ProjectTileState { viewingMyProject, viewingUserProject }
+enum ProjectTileState { viewingMyProject, viewingUserProject, viewingProjectsOnUserProfile }

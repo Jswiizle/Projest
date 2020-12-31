@@ -48,7 +48,7 @@ class ProjectStream extends StatelessWidget {
 
           final p = ProjectTile(
             project: pObject,
-            state: ProjectTileState.viewingMyProject,
+            state: state == ProjectStreamState.viewUserProfileProjects ? ProjectTileState.viewingProjectsOnUserProfile : ProjectTileState.viewingMyProject,
             onTap: () {
               switch (state) {
                 case ProjectStreamState.myProjects:
@@ -56,6 +56,7 @@ class ProjectStream extends StatelessWidget {
                   Navigator.pushNamed(context, ViewMyProjectScreen.id);
                   break;
                 case ProjectStreamState.viewUserProjects:
+                case ProjectStreamState.viewUserProfileProjects:
                   if (projectObject.id == pObject.id) {
                     ViewUserProjectScreen.p = pObject;
                     Navigator.pop(context);
@@ -67,6 +68,7 @@ class ProjectStream extends StatelessWidget {
                   }
               }
             },
+
             onLongPress: () async {
               onLongPress(pObject);
             },
@@ -74,7 +76,7 @@ class ProjectStream extends StatelessWidget {
           projectList.add(p);
         }
         return ListView(
-          padding: EdgeInsets.symmetric(horizontal: 12.5, vertical: 12.5),
+          padding: EdgeInsets.all(7.5),
           children: projectList,
           itemExtent: 80,
         );
@@ -86,6 +88,7 @@ class ProjectStream extends StatelessWidget {
 enum ProjectStreamState {
   myProjects,
   viewUserProjects,
+  viewUserProfileProjects
 }
 
 //NOTES:

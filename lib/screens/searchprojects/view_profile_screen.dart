@@ -17,16 +17,11 @@ class ViewProfileScreen extends StatefulWidget {
 }
 
 class _ViewProfileScreenState extends State<ViewProfileScreen> {
-  TextEditingController nameController;
-  TextEditingController emailController;
 
   ImageProvider avatarProvider;
 
   @override
   void initState() {
-    nameController = TextEditingController(text: widget.user.username);
-    emailController = TextEditingController(text: widget.user.email);
-
     avatarProvider = widget.user.profileImageLink != null
         ? NetworkImage(widget.user.profileImageLink)
         : AssetImage('images/profile.png');
@@ -34,12 +29,13 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
-        title: Text('View User Profile'),
+        title: Text("${capitalize(widget.user.username)}'s Profile"),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 17.5),
@@ -89,20 +85,20 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SizedBox(height: 30),
+              SizedBox(height: 40),
               CircleAvatar(
-                radius: 76,
+                radius: 75.75,
                 backgroundColor: kDarkBlueCompliment,
                 child: CircleAvatar(
                   radius: 74.75,
                   backgroundImage: avatarProvider,
                 ),
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
               Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
-                elevation: 3,
+                elevation: 2,
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
@@ -112,31 +108,16 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 25),
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: TextField(
-                  enabled: false,
-                  controller: nameController,
-                  decoration: kTextFieldDecoration.copyWith(hintText: 'Name'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 7.5, 15, 60),
-                child: TextField(
-                  enabled: false,
-                  controller: emailController,
-                  decoration: kTextFieldDecoration,
-                ),
-              ),
+              SizedBox(height: 75,),
               Text(
                 'Projects',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
+              SizedBox(height: 5),
               Expanded(
                 child: ProjectStream(
                   projectObject: ViewUserProjectScreen.p,
-                  state: ProjectStreamState.viewUserProjects,
+                  state: ProjectStreamState.viewUserProfileProjects,
                   viewUserProfileUid: widget.user.uid,
                 ),
               ),
@@ -146,4 +127,6 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
       ),
     );
   }
+
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 }

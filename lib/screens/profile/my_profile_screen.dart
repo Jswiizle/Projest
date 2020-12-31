@@ -49,12 +49,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 40),
+                SizedBox(height: 17.5),
                 Stack(
                   children: [
                     CircleAvatar(
                       backgroundColor: kDarkBlueCompliment,
-                      radius: 102,
+                      radius: 101.5,
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         radius: 100,
@@ -79,7 +79,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     )
                   ],
                 ),
-                SizedBox(height: 25),
+                SizedBox(height: 12.5),
                 GestureDetector(
                   onTap: () {
                     AlertHelper helper = AlertHelper(
@@ -104,7 +104,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 2.5),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 10, 10),
                   child: Row(
@@ -122,7 +122,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         },
                         child: Icon(
                           Icons.edit,
-                          color: kPrimaryColor,
+                          color: kDarkBlueCompliment,
                           size: 25,
                         ),
                       ),
@@ -146,7 +146,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         },
                         child: Icon(
                           Icons.edit,
-                          color: kPrimaryColor,
+                          color: kDarkBlueCompliment,
                           size: 25,
                         ),
                       ),
@@ -158,7 +158,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'You have ${removeDecimalZeroFormat(FirebaseAuthHelper.loggedInUser.credits.toDouble())} credits',
+                  FirebaseAuthHelper.loggedInUser.credits.toDouble() != 1 ? 'You have ${removeDecimalZeroFormat(FirebaseAuthHelper.loggedInUser.credits.toDouble())} credits' : 'You have ${removeDecimalZeroFormat(FirebaseAuthHelper.loggedInUser.credits.toDouble())} credit'
+                      ,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -177,7 +178,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         Icons.details,
                         size: 25,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -210,12 +211,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: TextField(
+                          keyboardType: TextInputType.emailAddress,
                           decoration: kTextFieldDecoration.copyWith(
-                            hintText: 'Enter your new email address',
+                            hintText: 'Enter your new email',
                             contentPadding: EdgeInsets.symmetric(
-                                vertical: 15.0, horizontal: 20.0),
+                                vertical: 5.0, horizontal: 20.0),
                           ),
                           onChanged: (e) {
                             newEmail = e;
@@ -227,7 +229,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 2.5),
+                      const EdgeInsets.symmetric(horizontal: 12),
                   child: RoundedButton(
                     title: 'Save',
                     color: kPrimaryColor,
@@ -267,7 +269,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(12.0),
                         child: TextField(
                           decoration: kTextFieldDecoration.copyWith(
                               hintText: 'Enter your new username'),
@@ -281,7 +283,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 2.5),
+                      const EdgeInsets.symmetric(horizontal: 12),
                   child: RoundedButton(
                     title: 'Save',
                     color: kPrimaryColor,

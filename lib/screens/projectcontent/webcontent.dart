@@ -291,7 +291,7 @@ class _WebContentState extends State<WebContent> {
     TextField _descriptionTextField = TextField(
       controller: descriptionController,
       keyboardType: TextInputType.multiline,
-      maxLines: 6,
+      maxLines: 4,
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Enter content description',
         contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
@@ -316,7 +316,7 @@ class _WebContentState extends State<WebContent> {
           children: [
             Container(
               width: 250,
-              height: 235,
+              height: 187.5,
               child: Column(
                 children: [
                   Padding(
@@ -331,8 +331,8 @@ class _WebContentState extends State<WebContent> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
+              padding: EdgeInsets.symmetric(
+                horizontal: 20
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -501,7 +501,7 @@ class _WebContentState extends State<WebContent> {
 
     TextField _descriptionTextField = TextField(
       keyboardType: TextInputType.multiline,
-      maxLines: 6,
+      maxLines: 4,
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Enter content description',
         contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
@@ -526,7 +526,7 @@ class _WebContentState extends State<WebContent> {
           children: [
             Container(
               width: 250,
-              height: 235,
+              height: 187.5,
               child: Column(
                 children: [
                   Padding(
@@ -543,13 +543,12 @@ class _WebContentState extends State<WebContent> {
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
-                vertical: 2.5,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.all(1.0),
                     child: RoundedButton(
                       title: 'Done',
                       color: kPrimaryColor,
@@ -560,16 +559,13 @@ class _WebContentState extends State<WebContent> {
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FlatButton(
-                      color: Colors.white,
-                      textColor: kPrimaryColor,
-                      child: Text('Skip'),
-                      onPressed: () {
-                        createBlipAndPassData("", "");
-                      },
-                    ),
+                  FlatButton(
+                    color: Colors.white,
+                    textColor: kPrimaryColor,
+                    child: Text('Skip'),
+                    onPressed: () {
+                      createBlipAndPassData("", "");
+                    },
                   )
                 ],
               ),

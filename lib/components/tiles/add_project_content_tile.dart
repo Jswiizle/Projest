@@ -11,15 +11,15 @@ class AddProjectContentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 4,
+      elevation: 2,
       child: ListTile(
         title: Padding(
           padding: const EdgeInsets.fromLTRB(8, 20, 8, 20),
           child: Text(
-            "Add Project Content",
+            "Add Content",
             style: TextStyle(
               fontFamily: 'Roboto',
-              fontSize: 20,
+              fontSize: 17.5,
               fontWeight: FontWeight.w500,
             ),
           ),

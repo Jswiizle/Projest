@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:projest/helpers/firebase_helper.dart';
 
+
 class ImageContent extends StatefulWidget {
   static const String id = 'image_content';
 
@@ -32,6 +33,7 @@ class _ImageContentState extends State<ImageContent> {
   bool loading = false;
   File imageFile;
   List<GestureDetector> appBarActions;
+  ImageProvider networkImgProvider;
 
   @override
   void initState() {
@@ -60,7 +62,7 @@ class _ImageContentState extends State<ImageContent> {
         ),
         floatingActionButton: configureFloatingActionButton(),
         resizeToAvoidBottomInset: false,
-      ),
+       ),
     );
   }
 
@@ -69,6 +71,7 @@ class _ImageContentState extends State<ImageContent> {
   void handleCroppedImage(File img) async {
     switch (widget.state) {
       case ImageContentState.viewingMyContent:
+        networkImgProvider.evict();
         toggleSpinner();
         StorageReference thumbnailRef = FirebaseStorage().ref().child(
             "${FirebaseAuthHelper.loggedInUser.uid}/${ViewMyProjectScreen.p.id}/content/${widget.blip.id}");
@@ -334,12 +337,19 @@ class _ImageContentState extends State<ImageContent> {
         break;
       case ImageContentState.viewingMyContent:
         if (imageFile == null) {
+
+          //TODO: Test new caching logic on iOS - works on Android
+
+
+          networkImgProvider = NetworkImage(widget.blip.imageUrl);
+
           img = Image(
-            image: NetworkImage(widget.blip.imageUrl),
+            image: networkImgProvider,
             key: UniqueKey(),
             fit: BoxFit.fill,
           );
         } else {
+
           img = Image(
             image: FileImage(imageFile),
             key: UniqueKey(),
@@ -392,7 +402,7 @@ class _ImageContentState extends State<ImageContent> {
 
     TextField _descriptionTextfield = TextField(
       keyboardType: TextInputType.multiline,
-      maxLines: 6,
+      maxLines: 4,
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Enter content description',
         contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
@@ -417,7 +427,7 @@ class _ImageContentState extends State<ImageContent> {
           children: [
             Container(
               width: 250,
-              height: 235,
+              height: 187.5,
               child: Column(
                 children: [
                   Padding(
@@ -448,16 +458,13 @@ class _ImageContentState extends State<ImageContent> {
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FlatButton(
-                      color: Colors.white,
-                      textColor: kPrimaryColor,
-                      child: Text('Skip'),
-                      onPressed: () {
-                        createBlipAndPassData("", "");
-                      },
-                    ),
+                  FlatButton(
+                    color: Colors.white,
+                    textColor: kPrimaryColor,
+                    child: Text('Skip'),
+                    onPressed: () {
+                      createBlipAndPassData("", "");
+                    },
                   )
                 ],
               ),
@@ -490,7 +497,7 @@ class _ImageContentState extends State<ImageContent> {
     TextField _descriptionTextfield = TextField(
       controller: descriptionController,
       keyboardType: TextInputType.multiline,
-      maxLines: 6,
+      maxLines: 4,
       decoration: kTextFieldDecoration.copyWith(
         hintText: 'Enter content description',
         contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
@@ -515,7 +522,7 @@ class _ImageContentState extends State<ImageContent> {
           children: [
             Container(
               width: 250,
-              height: 235,
+              height: 175,
               child: Column(
                 children: [
                   Padding(

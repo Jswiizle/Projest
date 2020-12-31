@@ -133,7 +133,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                   children: [
                     Container(
                       height: 60,
-                      width: 50,
+                      width: 55,
                       child: FittedBox(
                         fit: BoxFit.contain,
                         child: DropdownButtonHideUnderline(
@@ -168,13 +168,13 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                     Text(
                       '   =   $creditsToSponsor Credits',
                       style: TextStyle(
-                          fontSize: 22.5, fontWeight: FontWeight.w600),
+                          fontSize: 22.5, fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: RoundedButton(
                     title: 'Boost',
                     color: isSponsorButtonEnabled ? kPrimaryColor : Colors.grey,

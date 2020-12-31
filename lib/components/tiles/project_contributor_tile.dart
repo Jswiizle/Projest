@@ -16,18 +16,18 @@ class ProjectContributorTile extends StatelessWidget {
         child: Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          elevation: 2,
+          elevation: 1.5,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CircleAvatar(
                   backgroundColor: kDarkBlueCompliment,
-                  radius: 26,
+                  radius: 21,
                   child: CircleAvatar(
-                    radius: 25,
+                    radius: 20,
                     backgroundImage: project.profileImageLink != null &&
                             project.profileImageLink != ""
                         ? NetworkImage(project.profileImageLink)

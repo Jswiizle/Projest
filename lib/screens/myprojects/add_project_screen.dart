@@ -7,7 +7,6 @@ import 'package:projest/components/buttons/rounded_button.dart';
 import 'package:projest/models/objects/blip_object.dart';
 import 'package:projest/models/objects/project_object.dart';
 import 'package:projest/models/objects/category_object.dart';
-import 'package:projest/components/tiles/add_project_content_tile.dart';
 import 'package:projest/components/tiles/project_content_tile.dart';
 import 'package:projest/screens/projectcontent/webcontent.dart';
 import 'package:projest/screens/projectcontent/imagecontent.dart';
@@ -75,15 +74,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
     super.initState();
 
     projectCategory = categories[0];
-
-    // listviewContent.add(AddProjectContentTile(
-    //   onAddImagePressed: () {
-    //     _presentImageContentScreenAndWaitForData();
-    //   },
-    //   onAddUrlPressed: () {
-    //     _presentWebContentScreenAndWaitForData();
-    //   },
-    // ));
   }
 
   @override
@@ -128,11 +118,11 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                 child: Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
-                  elevation: 4,
+                  elevation: 2,
                   child: Row(
                     children: [
                       Padding(
@@ -141,7 +131,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                           'Select A Category',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            fontSize: 20,
+                            fontSize: 17.5,
                           ),
                         ),
                       ),
@@ -171,7 +161,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(8),
                 child: RoundedButton(
                   title: 'Add Project',
                   color: kPrimaryColor,
@@ -219,7 +209,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
             c.category,
             style: TextStyle(
               fontWeight: FontWeight.w300,
-              fontSize: 18,
+              fontSize: 15,
             ),
           ),
           value: c,
@@ -231,6 +221,9 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   }
 
   void _presentWebContentScreenAndWaitForData() async {
+
+    FocusScope.of(context).unfocus();
+
     BlipObject _blip = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -266,6 +259,9 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   }
 
   void _presentImageContentScreenAndWaitForData() async {
+
+    FocusScope.of(context).unfocus();
+
     BlipObject _blip = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -316,12 +312,11 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
           children: [
             Container(
               width: 300,
-              height: 580,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
-                    height: 200,
+                    height: 170,
                     child: CriteriaListview(
                       selectedCriteria: selectedCriteria,
                       category: projectCategory,
@@ -341,17 +336,18 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 6, 24, 6),
-                    child: Container(
-                      height: 180,
-                      width: 320,
-                      child: ClipRRect(
-                        child: customThumbnail == null
-                            ? defaultImage
-                            : Image.file(
-                                customThumbnail,
-                                fit: BoxFit.fill,
-                              ),
-                        borderRadius: BorderRadius.circular(16.0),
+                    child: AspectRatio(
+                      aspectRatio: 16/9,
+                      child: Container(
+                        child: ClipRRect(
+                          child: customThumbnail == null
+                              ? defaultImage
+                              : Image.file(
+                                  customThumbnail,
+                                  fit: BoxFit.fill,
+                                ),
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
                       ),
                     ),
                   ),

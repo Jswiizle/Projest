@@ -22,85 +22,73 @@ class _ProjectContentCoverPageState extends State<ProjectContentCoverPage> {
         title: Text('Project Content'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: 75,
-            ),
-            Container(
-              height: 500,
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: widget.addImageContentCallback,
-                    child: Container(
-                      width: 350,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: widget.addImageContentCallback,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Add Image Content',
+                          style: TextStyle(
+                              fontSize: 27.5, fontWeight: FontWeight.w600),
                         ),
-                        elevation: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(25.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Add Image Content',
-                                style: TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Icon(
-                                Icons.image,
-                                size: 100,
-                              ),
-                            ],
-                          ),
+                        SizedBox(
+                          height: 25,
                         ),
-                      ),
+                        Icon(
+                          Icons.image,
+                          size: 100,
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  GestureDetector(
-                    onTap: widget.addWebContentCallback,
-                    child: Container(
-                      width: 350,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(25.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Add Web Content',
-                                style: TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Icon(
-                                Icons.link,
-                                size: 100,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+                ),
               ),
-            )
-          ],
+              SizedBox(
+                height: 20,
+              ),
+              GestureDetector(
+                onTap: widget.addWebContentCallback,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Add Web Content',
+                          style: TextStyle(
+                              fontSize: 27.5, fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Icon(
+                          Icons.link,
+                          size: 100,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

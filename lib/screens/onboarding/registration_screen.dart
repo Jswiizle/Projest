@@ -14,15 +14,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 final _firestore = FirebaseFirestore.instance;
 final _authHelper = FirebaseAuthHelper();
 
-List<Map<String, dynamic>> _convertInterestsToJson(
-    List<CategoryObject> categories) {
-  List<Map<String, dynamic>> map = [];
-
-  for (CategoryObject cat in categories) {
-    map.add(cat.toJson());
-  }
-  return map;
-}
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -35,12 +26,105 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool showSpinner = false;
   String email;
   String password;
-  String name;
+  String username;
 
   List<CategoryObject> categories;
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text('Registration'),
+        backgroundColor: kPrimaryColor,
+      ),
+      backgroundColor: Colors.white,
+      body: ModalProgressHUD(
+        inAsyncCall: showSpinner,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(
+                height: 17.5,
+              ),
+              Hero(
+                tag: 'logo',
+                child: Container(
+                  height: 82.5,
+                  child: Image.asset('images/logo.png'),
+                ),
+              ),
+              SizedBox(
+                height: 17.5,
+              ),
+              TextField(
+                keyboardType: TextInputType.visiblePassword
+                ,
+                enableSuggestions: false,
+                textAlign: TextAlign.center,
+                textInputAction: TextInputAction.next,
+                onChanged: (value) {
+                  email = value;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Email Address'),),
+              SizedBox(
+                height: 10.0,
+              ),
+              TextField(
+                enableSuggestions: false,
+                keyboardType: TextInputType.visiblePassword,
+                textAlign: TextAlign.center,
+                textInputAction: TextInputAction.next,
+                onChanged: (value) {
+                  username = value;
+                },
+                decoration:
+                kTextFieldDecoration.copyWith(hintText: 'Username'),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              TextField(
+                keyboardType: TextInputType.visiblePassword,
+                obscureText: true,
+                textAlign: TextAlign.center,
+                textInputAction: TextInputAction.done,
+                onChanged: (value) {
+                  password = value;
+                },
+                decoration:
+                kTextFieldDecoration.copyWith(hintText: 'Password'),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              RoundedButton(
+                color: kDarkBlueCompliment,
+                title: 'Register',
+                onPressed: () async {
+
+                  FocusScope.of(context).unfocus();
+
+                  if (passwordIsSufficient() &&
+                      emailIsSufficient() &&
+                      usernameIsSufficient() && await usernameAndEmailAreAvailable()) {
+                    _gatherUserInterests();
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
   Future<void> _gatherUserInterests() async {
-    CategoryListView listview = CategoryListView(
+    CategoryListView listView = CategoryListView(
       state: CategoryListViewState.multiple,
       onCategoriesChanged: (newCategories) {
         List<CategoryObject> selectedCategories = [];
@@ -71,7 +155,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             Container(
               width: 200,
               height: 400,
-              child: listview,
+              child: listView,
             ),
             Padding(
               padding:
@@ -121,26 +205,61 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return sufficient;
   }
 
-  bool nameIsSufficient() {
+  bool usernameIsSufficient() {
     bool _sufficient;
 
-    if (name.length > 1) {
+    if (username.length > 1) {
       _sufficient = true;
     } else {
       AlertHelper helper = AlertHelper(
           choice1: 'Ok',
-          title: 'Insufficient Name',
-          body: 'Please ensure your name is at least 1 character');
+          title: 'Insufficient Username',
+          body: 'Please ensure your username is at least 1 character');
       helper.generateAlert(context);
     }
 
     return _sufficient;
   }
 
+  Future<bool> usernameAndEmailAreAvailable() async {
+    bool usernameIsAvailable;
+    bool emailIsAvailable;
+    bool bothAreAvailable = true;
+
+    FirestoreHelper helper = FirestoreHelper();
+
+    usernameIsAvailable = await helper.usernameIsAvailable(username.toLowerCase());
+    emailIsAvailable = await helper.emailIsAvailable(email.toLowerCase());
+
+    if (usernameIsAvailable == false) {
+      AlertHelper helper = AlertHelper(title: 'Username Unavailable', body: 'Please enter a different username');
+      helper.generateAlert(context);
+      bothAreAvailable = false;
+    }
+
+    if (emailIsAvailable == false) {
+      AlertHelper helper = AlertHelper(title: 'Email Unavailable', body: 'There is already an account registered to this email address');
+      helper.generateAlert(context);
+      bothAreAvailable = false;
+    }
+
+    return bothAreAvailable;
+  }
+
   _toggleSpinner() {
     setState(() {
       showSpinner = !showSpinner;
     });
+  }
+
+  List<Map<String, dynamic>> _convertInterestsToJson(
+      List<CategoryObject> categories) {
+    List<Map<String, dynamic>> map = [];
+
+    for (CategoryObject cat in categories) {
+      map.add(cat.toJson());
+    }
+    return map;
   }
 
   _createAccount() async {
@@ -158,7 +277,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         points: 0,
         earlyAdopter: false,
         joinDate: Timestamp.now(),
-        username: name,
+        username: username.toLowerCase(),
         blockedByUid: [],
         blockedUsersUid: [],
       );
@@ -184,87 +303,5 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           title: 'Error', body: errorMsg, choice1: 'Ok', choice2: 'Cancel');
       aHelper.generateAlert(context);
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Registration'),
-        backgroundColor: kPrimaryColor,
-      ),
-      backgroundColor: Colors.white,
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              SizedBox(
-                height: 50,
-              ),
-              Flexible(
-                child: Hero(
-                  tag: 'logo',
-                  child: Container(
-                    height: 100.0,
-                    child: Image.asset('images/logo.png'),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
-              TextField(
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  name = value;
-                },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Enter your name'),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    email = value;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your email')),
-              SizedBox(
-                height: 10.0,
-              ),
-              TextField(
-                obscureText: true,
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  password = value;
-                },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Enter a password'),
-              ),
-              SizedBox(
-                height: 24.0,
-              ),
-              RoundedButton(
-                color: kDarkBlueCompliment,
-                title: 'Register',
-                onPressed: () async {
-                  if (passwordIsSufficient() &&
-                      emailIsSufficient() &&
-                      nameIsSufficient()) {
-                    _gatherUserInterests();
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

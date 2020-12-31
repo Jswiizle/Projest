@@ -23,27 +23,25 @@ class AuthExceptionHandler {
     print("code is ${e.code}");
     var status;
     switch (e.code) {
-      case 'invalid-email':
-
-      case "ERROR_INVALID_EMAIL":
+      case "invalid-email":
         status = AuthResultStatus.invalidEmail;
         break;
-      case "ERROR_WRONG_PASSWORD":
+      case "wrong-password":
         status = AuthResultStatus.wrongPassword;
         break;
-      case "ERROR_USER_NOT_FOUND":
+      case "user-not-found":
         status = AuthResultStatus.userNotFound;
         break;
-      case "ERROR_USER_DISABLED":
+      case "user-disabled":
         status = AuthResultStatus.userDisabled;
         break;
-      case "ERROR_TOO_MANY_REQUESTS":
+      case "too-many-requests":
         status = AuthResultStatus.tooManyRequests;
         break;
-      case "ERROR_OPERATION_NOT_ALLOWED":
+      case "operation-not-allowed":
         status = AuthResultStatus.operationNotAllowed;
         break;
-      case "ERROR_EMAIL_ALREADY_IN_USE":
+      case "email-already-in-use":
         status = AuthResultStatus.emailAlreadyExists;
         break;
       default:
@@ -177,6 +175,34 @@ class FirestoreHelper {
         updateFailed();
       }
     }
+  }
+  
+  Future<bool> usernameIsAvailable(String username) async {
+    bool available;
+    
+    await _firestore.collection('Users').where('username', isEqualTo: username).get().then((value) async {
+      if (value.docs.isEmpty) {
+        available = true;
+      } else {
+        available = false;
+      }
+    });
+    
+    return available;
+  }
+
+  Future<bool> emailIsAvailable(String email) async {
+    bool available;
+
+    await _firestore.collection('Users').where('email', isEqualTo: email).get().then((value) async {
+      if (value.docs.isEmpty) {
+        available = true;
+      } else {
+        available = false;
+      }
+    });
+
+    return available;
   }
 
   Future<void> updateProjectsWithNewUserPointsToGive(

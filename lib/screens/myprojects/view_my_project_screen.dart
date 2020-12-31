@@ -28,6 +28,8 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
 
   ImageProvider provider;
 
+  TextEditingController descriptionController = TextEditingController(text: ViewMyProjectScreen.p.description);
+
   @override
   Widget build(BuildContext context) {
     provider = ViewMyProjectScreen.p.thumbnailLink != null
@@ -77,20 +79,20 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
             ),
           ],
         ),
-        body: SafeArea(
+        body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.fromLTRB(15, 15, 15, 25),
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.5)),
-                    elevation: 8,
+                    elevation: 2,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.5),
+                      borderRadius: BorderRadius.circular(10),
                       child: Image(
                         key: UniqueKey(),
                         image: provider,
@@ -103,7 +105,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 5.0),
+                padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 2.5),
                 child: Row(
                   children: [
                     Text(
@@ -114,9 +116,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(
-                      width: 12.5,
-                    ),
+                    SizedBox(width: 10),
                     GestureDetector(
                       onTap: () {
                         _presentEditAlert(
@@ -128,19 +128,15 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      ViewMyProjectScreen.p.description,
-                      style: TextStyle(fontFamily: 'Roboto', fontSize: 16),
-                    ),
-                  ),
+                padding: const EdgeInsets.fromLTRB(20, 0.0, 20, 25.0),
+                child: TextField(
+                  controller: descriptionController,
+                  enabled: false,
+                  maxLines: null,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
+                padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 7.5),
                 child: Text(
                   'Project Feedback',
                   style: TextStyle(
@@ -149,7 +145,8 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                       fontWeight: FontWeight.w700),
                 ),
               ),
-              Expanded(
+              Container(
+                  height: 175,
                   child: FeedbackListView(
                 project: ViewMyProjectScreen.p,
                 refreshCallback: () {
@@ -157,7 +154,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                 },
               )),
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                padding: EdgeInsets.fromLTRB(20, 15, 20, 5),
                 child: RoundedButton(
                   color: kPrimaryColor,
                   title: 'Change Project Thumbnail',
@@ -171,7 +168,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                 child: FlatButton(
                   child: Text(
                     'Delete Project',
-                    style: TextStyle(color: kPrimaryColor),
+                    style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),
                   ),
                   onPressed: () {
                     print('Pressed');
@@ -210,6 +207,9 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
   Future<void> _presentEditAlert(EditTextAlertState state) async {
     switch (state) {
       case EditTextAlertState.editingDescription:
+
+        TextEditingController controller = TextEditingController(text: ViewMyProjectScreen.p.description);
+
         String newDescription;
         await showDialog(
           context: context,
@@ -231,6 +231,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: TextField(
+                          controller: controller,
                           keyboardType: TextInputType.multiline,
                           maxLines: 6,
                           decoration: kTextFieldDecoration.copyWith(
@@ -250,16 +251,20 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 2.5),
                   child: RoundedButton(
-                    title: 'Done',
+                    title: 'Save',
                     color: kPrimaryColor,
                     onPressed: () async {
-                      setState(() {
-                        ViewMyProjectScreen.p.description = newDescription;
-                      });
 
-                      FirestoreHelper helper = FirestoreHelper();
-                      await helper.updateProject(ViewMyProjectScreen.p);
+                      if (newDescription != null) {
 
+                        setState(() {
+                          descriptionController.text = newDescription;
+                          ViewMyProjectScreen.p.description = newDescription;
+                        });
+
+                        FirestoreHelper helper = FirestoreHelper();
+                        await helper.updateProject(ViewMyProjectScreen.p);
+                      }
                       Navigator.pop(context);
                     },
                   ),
@@ -270,6 +275,9 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
         );
         break;
       case EditTextAlertState.editingTitle:
+
+        TextEditingController controller = TextEditingController(text: ViewMyProjectScreen.p.title);
+
         String newTitle;
         await showDialog(
           context: context,
@@ -291,6 +299,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: TextField(
+                          controller: controller,
                           decoration: kTextFieldDecoration.copyWith(
                               hintText: 'Enter a new title'),
                           onChanged: (title) {
@@ -305,15 +314,20 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 2.5),
                   child: RoundedButton(
-                    title: 'Done',
+                    title: 'Save',
                     color: kPrimaryColor,
                     onPressed: () async {
-                      setState(() {
-                        ViewMyProjectScreen.p.title = newTitle;
-                      });
 
-                      FirestoreHelper helper = FirestoreHelper();
-                      await helper.updateProject(ViewMyProjectScreen.p);
+                      if (newTitle != null) {
+
+                        setState(() {
+                          ViewMyProjectScreen.p.title = newTitle;
+                        });
+
+                        FirestoreHelper helper = FirestoreHelper();
+                        await helper.updateProject(ViewMyProjectScreen.p);
+                      }
+
                       Navigator.pop(context);
                     },
                   ),

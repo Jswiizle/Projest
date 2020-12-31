@@ -38,7 +38,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Text(
                       'Projest',
                       style: TextStyle(
-                        fontSize: 90.0,
+                        fontSize: 70.0,
                         fontFamily: 'LobsterTwo',
                         fontWeight: FontWeight.w700,
                         color: kDarkBlueCompliment,
@@ -49,8 +49,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     tag: 'logo',
                     child: Image(
                       image: AssetImage('images/logo.png'),
-                      height: 90,
-                      width: 90,
+                      height: 70,
+                      width: 70,
                     ),
                   ),
                 ],

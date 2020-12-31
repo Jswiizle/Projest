@@ -71,7 +71,7 @@ class _ViewReceivedFeedbackScreenState
         list.add(
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(10),
               itemCount: _criteria.length,
               itemBuilder: (context, i) {
                 return Card(
@@ -120,6 +120,9 @@ class _ViewReceivedFeedbackScreenState
           ),
         );
         list.add(
+          SizedBox(height: 20)
+        );
+        list.add(
           Text(
             'Was This Feedback Helpful?',
             style: TextStyle(
@@ -132,7 +135,7 @@ class _ViewReceivedFeedbackScreenState
         list.add(
           Padding(
             padding: const EdgeInsets.only(
-                left: 40.0, right: 40.0, bottom: 40.0, top: 10.0),
+                left: 40.0, right: 40.0, bottom: 20.0, top: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -252,7 +255,7 @@ class _ViewReceivedFeedbackScreenState
               itemCount: _criteria.length,
               itemBuilder: (context, i) {
                 return Card(
-                  elevation: 10.0,
+                  elevation: 2.0,
                   child: ExpansionTile(
                     title: Row(
                       children: <Widget>[
@@ -308,7 +311,7 @@ class _ViewReceivedFeedbackScreenState
         );
         list.add(
           Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 50),
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 35),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -352,7 +355,7 @@ class _ViewReceivedFeedbackScreenState
         ),
       ));
       textDisplay.add(Text(
-        'Seconds',
+        widget.f.timeSpentReviewing != 1 ? 'Seconds' : 'Second',
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,

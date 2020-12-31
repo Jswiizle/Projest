@@ -37,7 +37,7 @@ class ProjectContributorList extends StatelessWidget {
 
     return ListView(
       scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 20.0),
+      padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5),
       shrinkWrap: true,
       children: tiles,
     );

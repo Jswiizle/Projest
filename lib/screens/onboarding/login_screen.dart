@@ -47,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Login'),
         backgroundColor: kPrimaryColor,
@@ -60,21 +61,22 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               SizedBox(
-                height: 50,
+                height: 17.5,
               ),
               Hero(
                 tag: 'logo',
                 child: Container(
-                  height: 100.0,
+                  height: 82.5,
                   child: Image.asset('images/logo.png'),
                 ),
               ),
               SizedBox(
-                height: 40.0,
+                height: 17.5,
               ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
+                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   email = value;
                 },
@@ -87,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 obscureText: true,
                 textAlign: TextAlign.center,
+                textInputAction: TextInputAction.done,
                 onChanged: (value) {
                   password = value;
                 },
@@ -94,12 +97,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     kTextFieldDecoration.copyWith(hintText: 'Enter Password'),
               ),
               SizedBox(
-                height: 24.0,
+                height: 10,
               ),
               RoundedButton(
                 color: kPrimaryColor,
                 title: 'Login',
                 onPressed: () async {
+
+                  FocusScope.of(context).unfocus();
+
                   if (canLogin() == true) {
                     toggleSpinner();
                     _login();

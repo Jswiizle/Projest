@@ -22,6 +22,7 @@ class Projest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: WelcomeScreen.id,
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
@@ -43,17 +44,21 @@ class Projest extends StatelessWidget {
 
 //IMMEDIATE BUG FIXES
 
+
 //MASTER TO_DO
 
 //TODO: - Import the old firebase database
-//TODO: - Add PLIST permission strings
+//TODO: - Change all fonts to roboto
+
+//TODO: - (V-1.1) - Add support for tablets
 
 //TODO: - (V2) Set up Pinterest style layout - dynamic cell height
 //TODO: - (V2) Create custom alert for displaying content info
 //TODO: - (V2) Add social media buttons to profile
 //TODO: - (V2) Add edit interests capability
 //TODO: - (V2) Implement push notifications
-//TODO: - (V2) Populate textField with current info when editing title/description
+//TODO: - (V2) Add a progress indicator for level
+//TODO: - (V2) Sign in with Google
 
 //TODO: - (VX) Allow users to add multiple project contributors
 //TODO: - (VX) Filter search results on project stream instead of locally - once there are a lot of projects
@@ -93,63 +98,112 @@ class Projest extends StatelessWidget {
 //TODO: + Block a user
 //TODO: + Unblock a user
 
+//SIMULATOR Android FUNCTION TESTING TO_DO
+
+//TODO: + Uploading a web project
+//TODO: + Uploading an image project
+//TODO: + Uploading a web+image project
+//TODO: + Uploading WITH a thumbnail
+//TODO: + Uploading WITHOUT a thumbnail
+//TODO: + Creating a new account
+//TODO: + Edit project title
+//TODO: + Edit project description
+//TODO: + Edit web content
+//TODO: + Edit web content description
+//TODO: + Edit image content
+//TODO: + Edit image content description
+//TODO: + Searching projects
+//TODO: + Signing in - try with invalid fields
+//TODO: + Changing profile image
+//TODO: + Deleting a project
+//TODO: + Add project thumbnail to project with default
+//TODO: + Editing project thumbnail
+//TODO: + Changing profile email
+//TODO: + Adding image content to existing
+//TODO: + Adding web content to existing
+//TODO: + Reviewing a image project
+//TODO: + Reviewing a web project
+//TODO: + Reviewing a web+image project
+//TODO: + Submitting feedback
+//TODO: + Submitting feedback on a sponsored project
+//TODO: + Rating feedback
+//TODO: + Test leveling up points to give - make sure it loops through projects
+//TODO: + Submit a project complaint
+//TODO: + Delete a project complaint
+//TODO: + Block a user
+//TODO: + Unblock a user
+
+
+//DEVICE Android FUNCTION TESTING TO_DO
+
+//TODO: + Uploading a web project
+//TODO: + Uploading an image project
+//TODO: + Uploading a web+image project
+//TODO: + Uploading WITH a thumbnail
+//TODO: + Uploading WITHOUT a thumbnail
+//TODO: + Creating a new account
+//TODO: + Edit project title
+//TODO: + Edit project description
+//TODO: + Edit web content
+//TODO: + Edit web content description
+//TODO: + Edit image content
+//TODO: + Edit image content description
+//TODO: + Searching projects
+//TODO: + Signing in - try with invalid fields
+//TODO: + Changing profile image
+//TODO: + Deleting a project
+//TODO: + Add project thumbnail to project with default
+//TODO: + Editing project thumbnail
+//TODO: + Changing profile email
+//TODO: + Adding image content to existing
+//TODO: + Adding web content to existing
+//TODO: + Reviewing a image project
+//TODO: + Reviewing a web project
+//TODO: + Reviewing a web+image project
+//TODO: + Submitting feedback
+//TODO: + Submitting feedback on a sponsored project
+//TODO: + Rating feedback
+//TODO: + Test leveling up points to give - make sure it loops through projects
+//TODO: + Submit a project complaint
+//TODO: + Delete a project complaint
+//TODO: + Block a user
+//TODO: + Unblock a user
+
 //iOS DEVICE FUNCTION TESTING TO_DO
 
 //TODO: - Uploading a web project
-//TODO: - Uploading an image project
+//TODO: + Uploading an image project
 //TODO: - Uploading a web+image project
-//TODO: - Uploading WITH a thumbnail
-//TODO: - Uploading WITHOUT a thumbnail
-//TODO: - Reviewing a image project
-//TODO: - Reviewing a web project
-//TODO: - Reviewing a web+image project
-//TODO: - Submitting feedback
-//TODO: - Adding image content to existing
-//TODO: - Adding web content to existing
-//TODO: - Submitting feedback on a sponsored project (bool for projectWasSponsored in feedback so that if it is rated after sponsorship ends user still gets 2x points?)
+//TODO: + Uploading WITH a thumbnail
+//TODO: + Uploading WITHOUT a thumbnail
+//TODO: - Creating a new account
+//TODO: + Edit project title
+//TODO: + Edit project description
+//TODO: + Edit web content
+//TODO: + Edit web content description
+//TODO: - Edit image content
+//TODO: - Edit image content description
+//TODO: - Searching projects
+//TODO: - Signing in - try with invalid fields
 //TODO: - Changing profile image
 //TODO: - Deleting a project
 //TODO: - Add project thumbnail to project with default
 //TODO: - Editing project thumbnail
 //TODO: - Changing profile email
+//TODO: - Adding image content to existing
+//TODO: - Adding web content to existing
+//TODO: - Reviewing a image project
+//TODO: - Reviewing a web project
+//TODO: - Reviewing a web+image project
+//TODO: - Submitting feedback
+//TODO: - Submitting feedback on a sponsored project
 //TODO: - Rating feedback
-//TODO: - Searching projects
-//TODO: - Creating a new account
-//TODO: - Signing in - try with invalid fields
 //TODO: - Test leveling up points to give - make sure it loops through projects
 //TODO: - Submit a project complaint
 //TODO: - Delete a project complaint
 //TODO: - Block a user
 //TODO: - Unblock a user
 
-//Android FUNCTION TESTING TO_DO
-
-//TODO: - Uploading a web project
-//TODO: - Uploading an image project
-//TODO: - Uploading a web+image project
-//TODO: - Uploading WITH a thumbnail
-//TODO: - Uploading WITHOUT a thumbnail
-//TODO: - Reviewing a image project
-//TODO: - Reviewing a web project
-//TODO: - Reviewing a web+image project
-//TODO: - Submitting feedback
-//TODO: - Adding image content to existing
-//TODO: - Adding web content to existing
-//TODO: - Submitting feedback on a sponsored project (bool for projectWasSponsored in feedback so that if it is rated after sponsorship ends user still gets 2x points?)
-//TODO: - Changing profile image
-//TODO: - Deleting a project
-//TODO: - Add project thumbnail to project with default
-//TODO: - Editing project thumbnail
-//TODO: - Changing profile email
-//TODO: - Rating feedback
-//TODO: - Searching projects
-//TODO: - Creating a new account
-//TODO: - Signing in - try with invalid fields
-//TODO: - Test leveling up points to give - make sure it loops through projects
-//TODO: - Submit a project complaint
-//TODO: - Delete a project complaint
-//TODO: - Block a user
-//TODO: - Unblock a user
 
 //iOS iPhones SCREEN SIZE TESTING TO_DO
 

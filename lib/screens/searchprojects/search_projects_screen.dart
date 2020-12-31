@@ -21,7 +21,7 @@ class SearchProjectsScreen extends StatefulWidget {
 class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
   TextEditingController _searchQueryController = TextEditingController();
   bool _isSearching = false;
-  String searchQuery = "Search Query";
+  String searchQuery = "";
   List<ProjectObject> projects = [];
   List<ProjectTile> listTiles = [];
   List<Text> tabs;
@@ -33,6 +33,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
     super.initState();
     authHelper = FirebaseAuthHelper();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +101,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
     List<ProjectTile> filtered = [];
 
     for (ProjectObject p in projects) {
-      if (p.title.contains(query)) {
+      if (p.title.toLowerCase().contains(query)) {
         filtered.add(ProjectTile(
           state: ProjectTileState.viewingUserProject,
           project: p,
@@ -165,7 +166,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
             }
           }
           return ListView(
-            padding: EdgeInsets.symmetric(horizontal: 12.5, vertical: 12.5),
+            padding: EdgeInsets.all(7.5),
             children: _isSearching == false
                 ? listTiles
                 : filteredProjectTiles(searchQuery),
@@ -221,7 +222,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
             }
           }
           return ListView(
-            padding: EdgeInsets.symmetric(horizontal: 12.5, vertical: 12.5),
+            padding: EdgeInsets.all(7.5),
             children: _isSearching == false
                 ? listTiles
                 : filteredProjectTiles(searchQuery),
@@ -280,28 +281,37 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
 
     listTiles = [];
 
-    setState(() {
-      _isSearching = true;
-    });
+
+    if(this.mounted) {
+      setState(() {
+        _isSearching = true;
+      });
+    }
   }
 
   void updateSearchQuery(String newQuery) {
-    setState(() {
-      searchQuery = newQuery;
-    });
+    if(this.mounted) {
+      setState(() {
+        searchQuery = newQuery.toLowerCase();
+      });
+    }
   }
 
   void _stopSearching() {
     _clearSearchQuery();
-    setState(() {
-      _isSearching = false;
-    });
+    if(this.mounted) {
+      setState(() {
+        _isSearching = false;
+      });
+    }
   }
 
   void _clearSearchQuery() {
-    setState(() {
-      _searchQueryController.clear();
-      updateSearchQuery("");
-    });
+    if(this.mounted) {
+      setState(() {
+        _searchQueryController.clear();
+        updateSearchQuery("");
+      });
+    }
   }
 }

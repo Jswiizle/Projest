@@ -11,7 +11,7 @@ class FeedbackTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 8,
+      elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: ListTile(

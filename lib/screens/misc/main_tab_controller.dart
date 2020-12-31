@@ -38,6 +38,22 @@ class _MainTabControllerState extends State<MainTabController> {
           ),
         )
       ];
+    } else if (_currentIndex == 2) {
+      return [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, SettingsScreen.id);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Icon(
+              Icons.settings,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+        )
+      ];
     } else {
       return null;
     }
@@ -56,9 +72,9 @@ class _MainTabControllerState extends State<MainTabController> {
   Widget configureAppBarLeading() {
     if (_currentIndex == 2) {
       return GestureDetector(
-        onTap: () {
-          FirebaseAuthHelper().logout();
-          Navigator.pop(context);
+        onTap: () async {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          await FirebaseAuthHelper().logout();
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 15),
@@ -99,48 +115,35 @@ class _MainTabControllerState extends State<MainTabController> {
 
     return ModalProgressHUD(
       inAsyncCall: _showSpinner,
-      child: Scaffold(
-        floatingActionButton: configureFloatingActionButton(),
-        appBar: _currentIndex != 1
-            ? AppBar(
-                leading: configureAppBarLeading(),
-                actions: configureAppBarActions(),
-                automaticallyImplyLeading: false,
-                title: Text(navigationBarItems[_currentIndex].label),
-                backgroundColor: Colors.lightBlueAccent,
-              )
-            : null,
-        bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: kPrimaryColor,
-          currentIndex: _currentIndex,
-          items: navigationBarItems,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          // floatingActionButton: configureFloatingActionButton(),
+          appBar: _currentIndex != 1
+              ? AppBar(
+                  leading: configureAppBarLeading(),
+                  actions: configureAppBarActions(),
+                  automaticallyImplyLeading: false,
+                  title: Text(navigationBarItems[_currentIndex].label),
+                  backgroundColor: Colors.lightBlueAccent,
+                )
+              : null,
+          bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: kPrimaryColor,
+            currentIndex: _currentIndex,
+            items: navigationBarItems,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+          body: tabs[_currentIndex],
         ),
-        body: tabs[_currentIndex],
       ),
     );
   }
 
-  FloatingActionButton configureFloatingActionButton() {
-    FloatingActionButton button;
-
-    if (_currentIndex == 2) {
-      button = FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, SettingsScreen.id);
-        },
-        child: Icon(Icons.settings),
-        backgroundColor: kPrimaryColor,
-        elevation: 4,
-      );
-    }
-
-    return button;
-  }
 
   void _toggleSpinner() {
     setState(() {
