@@ -21,14 +21,12 @@ class ViewUserProjectScreen extends StatefulWidget {
   _ViewUserProjectScreenState createState() => _ViewUserProjectScreenState();
 }
 
-
-
 class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
   ImageProvider provider;
   List<ProjectComplaintReasonObject> reasons = [];
   String complaintText;
-  TextEditingController descriptionController = TextEditingController(text: ViewUserProjectScreen.p.description);
-
+  TextEditingController descriptionController =
+      TextEditingController(text: ViewUserProjectScreen.p.description);
 
   @override
   Widget build(BuildContext context) {
@@ -55,104 +53,106 @@ class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
           ),
         ],
         backgroundColor: kPrimaryColor,
-        title: Text(ViewUserProjectScreen.p.title),
+        title: Text(
+          ViewUserProjectScreen.p.title,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.5)),
-                elevation: 2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image(
-                    image: provider,
-                    width: 320,
-                    height: 180,
-                    fit: BoxFit.fill,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.5)),
+                  elevation: 2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image(
+                      image: provider,
+                      width: 320,
+                      height: 180,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 2.5),
-            child: Text(
-              'Description',
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
-            child: Container(
-              height: 65,
-              child: SingleChildScrollView(
-                child: TextField(
-                  controller: descriptionController,
-                  enabled: false,
-                  maxLines: null,
+              SizedBox(height: 24),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child: Text(
+                  'Description',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5),
-            child: Text(
-              'Project Contributors',
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          Container(
-            height: 110,
-            child: ProjectContributorList(
-              project: ViewUserProjectScreen.p,
-            ),
-          ),
-          Expanded(child: SizedBox()),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 15),
-            child: RoundedButton(
-              title: ViewUserProjectScreen.p.checkIfUserHasSubmittedFeedback()
-                  ? 'View Content'
-                  : 'Review Content',
-              color: kPrimaryColor,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewProjectContentScreen(
-                        submittedFeedbackCallback: () {
-                          setState(() {});
-                        },
-                        p: ViewUserProjectScreen.p,
-                        state: ViewUserProjectScreen.p
-                                    .checkIfUserHasSubmittedFeedback() ==
-                                true
-                            ? ViewProjectContentScreenState
-                                .viewingUserProjectContentRated
-                            : ViewProjectContentScreenState
-                                .viewingUserProjectContentUnrated),
-                    fullscreenDialog: true,
+              Container(
+                height: 80,
+                child: SingleChildScrollView(
+                  child: TextField(
+                    controller: descriptionController,
+                    enabled: false,
+                    maxLines: null,
                   ),
-                );
-              },
-            ),
+                ),
+              ),
+              SizedBox(height: 12),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child: Text(
+                  'Project Contributors',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              SizedBox(height: 6),
+              Container(
+                height: 115,
+                child: ProjectContributorList(
+                  project: ViewUserProjectScreen.p,
+                ),
+              ),
+              Expanded(child: SizedBox()),
+              RoundedButton(
+                title: ViewUserProjectScreen.p.checkIfUserHasSubmittedFeedback()
+                    ? 'View Content'
+                    : 'Review Content',
+                color: kPrimaryColor,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewProjectContentScreen(
+                          submittedFeedbackCallback: () {
+                            setState(() {});
+                          },
+                          p: ViewUserProjectScreen.p,
+                          state: ViewUserProjectScreen.p
+                                      .checkIfUserHasSubmittedFeedback() ==
+                                  true
+                              ? ViewProjectContentScreenState
+                                  .viewingUserProjectContentRated
+                              : ViewProjectContentScreenState
+                                  .viewingUserProjectContentUnrated),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -180,7 +180,6 @@ class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
             'Submit Project Complaint',
             style: TextStyle(
               fontSize: 20,
-              fontFamily: 'Roboto',
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -207,8 +206,7 @@ class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.fromLTRB(20, 5, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
               child: RoundedButton(
                 title: 'Submit',
                 color: kPrimaryColor,
@@ -250,7 +248,15 @@ class _ViewUserProjectScreenState extends State<ViewUserProjectScreen> {
     FirestoreHelper helper = FirestoreHelper();
 
     await helper.submitProjectComplaint(object);
+
+    print('1');
+
     await helper.updateProject(ViewUserProjectScreen.p);
+
+    print('2');
+
     await helper.updateCurrentUser();
+
+    print('3');
   }
 }

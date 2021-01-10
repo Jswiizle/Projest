@@ -146,17 +146,14 @@ class UserObject {
     if (points < 5) {
       p = 1;
     } else if (points < 10) {
-      p = 1.5;
-    } else if (points < 20) {
       p = 2;
-    } else if (points < 50) {
-      p = 3;
-    } else if (points < 100) {
-      p = 4;
-    } else {
+    } else if (points < 20) {
       p = 5;
+    } else if (points < 50) {
+      p = 10;
+    } else {
+      p = 25;
     }
-
     return p;
   }
 

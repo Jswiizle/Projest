@@ -42,8 +42,7 @@ class ProjectComplaintTile extends StatelessWidget {
           complaint.projectTitle,
           maxLines: 1,
           style: TextStyle(
-            fontSize: 22.5,
-            fontFamily: 'Roboto',
+            fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -51,7 +50,7 @@ class ProjectComplaintTile extends StatelessWidget {
           'Complaint: ${complaint.text}',
           // overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            fontFamily: 'Roboto',
+            fontSize: 12,
             fontWeight: FontWeight.w200,
           ),
         ),

@@ -48,7 +48,9 @@ class ProjectStream extends StatelessWidget {
 
           final p = ProjectTile(
             project: pObject,
-            state: state == ProjectStreamState.viewUserProfileProjects ? ProjectTileState.viewingProjectsOnUserProfile : ProjectTileState.viewingMyProject,
+            state: state == ProjectStreamState.viewUserProfileProjects
+                ? ProjectTileState.viewingProjectsOnUserProfile
+                : ProjectTileState.viewingMyProject,
             onTap: () {
               switch (state) {
                 case ProjectStreamState.myProjects:
@@ -68,7 +70,6 @@ class ProjectStream extends StatelessWidget {
                   }
               }
             },
-
             onLongPress: () async {
               onLongPress(pObject);
             },
@@ -76,7 +77,7 @@ class ProjectStream extends StatelessWidget {
           projectList.add(p);
         }
         return ListView(
-          padding: EdgeInsets.all(7.5),
+          padding: EdgeInsets.all(4),
           children: projectList,
           itemExtent: 80,
         );

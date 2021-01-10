@@ -105,10 +105,11 @@ class FirebaseAuthHelper {
 
   Future<AuthResultStatus> createAccount({email, pass}) async {
     try {
-      UserCredential authResult = await auth.createUserWithEmailAndPassword(
+      final authResult = await auth.createUserWithEmailAndPassword(
           email: email, password: pass);
       if (authResult.user != null) {
         _status = AuthResultStatus.successful;
+        authUser = auth.currentUser;
       } else {
         _status = AuthResultStatus.undefined;
       }
@@ -154,6 +155,9 @@ class FirestoreHelper {
         .doc(FirebaseAuthHelper.loggedInUser.uid)
         .set(FirebaseAuthHelper.loggedInUser.toJson());
 
+    print(
+        'Update current user called. Email for user object is ${FirebaseAuthHelper.loggedInUser.email} and auth user is ${FirebaseAuthHelper.authUser.email}');
+
     if (FirebaseAuthHelper.loggedInUser.email !=
         FirebaseAuthHelper.authUser.email) {
       FirebaseAuthHelper helper = FirebaseAuthHelper();
@@ -176,25 +180,33 @@ class FirestoreHelper {
       }
     }
   }
-  
+
   Future<bool> usernameIsAvailable(String username) async {
     bool available;
-    
-    await _firestore.collection('Users').where('username', isEqualTo: username).get().then((value) async {
+
+    await _firestore
+        .collection('Users')
+        .where('username', isEqualTo: username)
+        .get()
+        .then((value) async {
       if (value.docs.isEmpty) {
         available = true;
       } else {
         available = false;
       }
     });
-    
+
     return available;
   }
 
   Future<bool> emailIsAvailable(String email) async {
     bool available;
 
-    await _firestore.collection('Users').where('email', isEqualTo: email).get().then((value) async {
+    await _firestore
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .get()
+        .then((value) async {
       if (value.docs.isEmpty) {
         available = true;
       } else {

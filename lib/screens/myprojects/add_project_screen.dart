@@ -86,24 +86,21 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
           backgroundColor: kPrimaryColor,
           title: Text('Add Project'),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(12, 12, 12, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                TextField(
                   decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Enter a project title'),
                   onChanged: (title) {
                     projectTitle = title;
                   },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                SizedBox(height: 12),
+                TextField(
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.multiline,
                   maxLines: 6,
@@ -116,10 +113,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                     projectDescription = description;
                   },
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                child: Card(
+                SizedBox(height: 12),
+                Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15)),
                   elevation: 2,
@@ -139,6 +134,9 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                         child: DropdownButton(
                           value: projectCategory,
                           items: createDropdownItems(),
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                          },
                           onChanged: (selectedCategory) {
                             setState(() {
                               projectCategory = selectedCategory;
@@ -149,20 +147,15 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                SizedBox(height: 12),
+                Expanded(
                   child: ProjectContentListView(
                     listViewContent: listviewContent,
                     onAddImagePressed: _presentImageContentScreenAndWaitForData,
                     onAddLinkPressed: _presentWebContentScreenAndWaitForData,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: RoundedButton(
+                RoundedButton(
                   title: 'Add Project',
                   color: kPrimaryColor,
                   onPressed: () {
@@ -191,8 +184,9 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                     }
                   },
                 ),
-              ),
-            ],
+                SizedBox(height: 5),
+              ],
+            ),
           ),
         ),
       ),
@@ -221,7 +215,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   }
 
   void _presentWebContentScreenAndWaitForData() async {
-
     FocusScope.of(context).unfocus();
 
     BlipObject _blip = await Navigator.push(
@@ -259,7 +252,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   }
 
   void _presentImageContentScreenAndWaitForData() async {
-
     FocusScope.of(context).unfocus();
 
     BlipObject _blip = await Navigator.push(
@@ -305,7 +297,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
             'Feedback Criteria',
             style: TextStyle(
               fontSize: 22.5,
-              fontFamily: 'Roboto',
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -330,14 +321,13 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                     child: Text('Project Thumbnail',
                         style: TextStyle(
                           fontSize: 22.5,
-                          fontFamily: 'Roboto',
                           fontWeight: FontWeight.w600,
                         )),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 6, 24, 6),
                     child: AspectRatio(
-                      aspectRatio: 16/9,
+                      aspectRatio: 16 / 9,
                       child: Container(
                         child: ClipRRect(
                           child: customThumbnail == null

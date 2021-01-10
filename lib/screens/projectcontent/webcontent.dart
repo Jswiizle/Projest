@@ -195,7 +195,6 @@ class _WebContentState extends State<WebContent> {
             setUrlDialogueTitle(),
             style: TextStyle(
               fontSize: 20,
-              fontFamily: 'Roboto',
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -309,7 +308,6 @@ class _WebContentState extends State<WebContent> {
             'Edit Content Details',
             style: TextStyle(
               fontSize: 20,
-              fontFamily: 'Roboto',
               fontWeight: FontWeight.w600,
             ),
           ),

@@ -12,6 +12,7 @@ class ProjectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 2,
       child: ListTile(
         contentPadding: EdgeInsets.only(right: 6),
@@ -42,7 +43,6 @@ class ProjectTile extends StatelessWidget {
           maxLines: 1,
           style: TextStyle(
             fontSize: 18,
-            fontFamily: 'Roboto',
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -52,7 +52,6 @@ class ProjectTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 14,
-            fontFamily: 'Roboto',
             fontWeight: FontWeight.w200,
           ),
         ),
@@ -100,8 +99,8 @@ class ProjectTile extends StatelessWidget {
           ],
         );
         break;
-      default: break;
-
+      default:
+        break;
     }
 
     return trailing;
@@ -177,4 +176,8 @@ class ProjectTile extends StatelessWidget {
   }
 }
 
-enum ProjectTileState { viewingMyProject, viewingUserProject, viewingProjectsOnUserProfile }
+enum ProjectTileState {
+  viewingMyProject,
+  viewingUserProject,
+  viewingProjectsOnUserProfile
+}

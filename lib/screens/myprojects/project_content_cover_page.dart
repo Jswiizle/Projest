@@ -42,11 +42,11 @@ class _ProjectContentCoverPageState extends State<ProjectContentCoverPage> {
                         Text(
                           'Add Image Content',
                           style: TextStyle(
-                              fontSize: 27.5, fontWeight: FontWeight.w600),
+                            fontSize: 27.5,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                        SizedBox(
-                          height: 25,
-                        ),
+                        SizedBox(height: 25),
                         Icon(
                           Icons.image,
                           size: 100,
@@ -73,7 +73,9 @@ class _ProjectContentCoverPageState extends State<ProjectContentCoverPage> {
                         Text(
                           'Add Web Content',
                           style: TextStyle(
-                              fontSize: 27.5, fontWeight: FontWeight.w600),
+                            fontSize: 27.5,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         SizedBox(
                           height: 25,

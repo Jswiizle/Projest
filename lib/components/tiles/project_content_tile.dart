@@ -23,7 +23,6 @@ class ProjectContentTile extends StatelessWidget {
                 Text(
                   blipObject.title ?? "",
                   style: TextStyle(
-                    fontFamily: 'Roboto',
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
@@ -32,7 +31,6 @@ class ProjectContentTile extends StatelessWidget {
                 Text(
                   blipObject.description ?? "",
                   style: TextStyle(
-                    fontFamily: 'Roboto',
                     fontSize: 12,
                     fontWeight: FontWeight.w200,
                     color: Colors.black45,

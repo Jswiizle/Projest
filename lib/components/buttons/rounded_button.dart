@@ -24,8 +24,7 @@ class RoundedButton extends StatelessWidget {
             title,
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

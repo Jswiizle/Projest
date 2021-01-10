@@ -51,7 +51,8 @@ class _BlockedUsersScreenState extends State<BlockedUsersScreen> {
               ),
               title: Text(
                 user.username,
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18
+                ),
               ),
               trailing: RoundedButton(
                 color: kPrimaryColor,

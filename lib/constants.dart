@@ -5,6 +5,7 @@ const kDarkBlueCompliment = Color(0xFF0B2933);
 const kLightOrangeCompliment = Color(0xFFFFA244);
 
 const kTextFieldDecoration = InputDecoration(
+  counterText: '',
   hintText: '',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   border: OutlineInputBorder(
@@ -19,8 +20,6 @@ const kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );
-
-
 
 const kMusicCriteria = [
   'General',

@@ -50,6 +50,7 @@ class _ViewReceivedFeedbackScreenState
                   helper.generateAlert(context);
                 },
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: createTimeDisplay(),
                 ),
               ),
@@ -58,7 +59,7 @@ class _ViewReceivedFeedbackScreenState
           backgroundColor: kPrimaryColor,
           title: Text('View Feedback'),
         ),
-        body: Column(children: createWidgetList()),
+        body: SafeArea(child: Column(children: createWidgetList())),
       ),
     );
   }
@@ -83,7 +84,7 @@ class _ViewReceivedFeedbackScreenState
                           _criteria[i].criteria,
                           style: TextStyle(
                             fontSize: 16.0,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         SizedBox(
@@ -119,23 +120,20 @@ class _ViewReceivedFeedbackScreenState
             ),
           ),
         );
-        list.add(
-          SizedBox(height: 20)
-        );
+        list.add(SizedBox(height: 20));
         list.add(
           Text(
             'Was This Feedback Helpful?',
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
-              fontFamily: 'Roboto',
             ),
           ),
         );
         list.add(
           Padding(
             padding: const EdgeInsets.only(
-                left: 40.0, right: 40.0, bottom: 20.0, top: 10.0),
+                left: 40.0, right: 40.0, bottom: 10, top: 7.5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -262,8 +260,8 @@ class _ViewReceivedFeedbackScreenState
                         Text(
                           _criteria[i].criteria,
                           style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         SizedBox(
@@ -305,13 +303,12 @@ class _ViewReceivedFeedbackScreenState
             style: TextStyle(
               fontSize: 21.5,
               fontWeight: FontWeight.w600,
-              fontFamily: 'Roboto',
             ),
           ),
         );
         list.add(
           Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 35),
+            padding: EdgeInsets.fromLTRB(20, 12, 20, 24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -320,7 +317,6 @@ class _ViewReceivedFeedbackScreenState
                   style: TextStyle(
                     fontSize: 21.5,
                     fontWeight: FontWeight.w500,
-                    fontFamily: 'Roboto',
                   ),
                 ),
                 SizedBox(width: 10),
@@ -350,14 +346,14 @@ class _ViewReceivedFeedbackScreenState
       textDisplay.add(Text(
         digitString,
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ));
       textDisplay.add(Text(
         widget.f.timeSpentReviewing != 1 ? 'Seconds' : 'Second',
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
       ));
@@ -368,14 +364,14 @@ class _ViewReceivedFeedbackScreenState
       textDisplay.add(Text(
         digitString,
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ));
       textDisplay.add(Text(
         unitsString,
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
       ));

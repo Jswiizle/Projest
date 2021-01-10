@@ -38,14 +38,14 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
       textDisplay.add(Text(
         SubmitFeedbackScreen.secondsViewed.toString(),
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ));
       textDisplay.add(Text(
         SubmitFeedbackScreen.secondsViewed != 1 ? 'Seconds' : 'Second',
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
       ));
@@ -53,14 +53,14 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
       textDisplay.add(Text(
         (SubmitFeedbackScreen.secondsViewed / 60).truncate().toString(),
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
       ));
       textDisplay.add(Text(
         SubmitFeedbackScreen.secondsViewed < 120 ? 'Minute' : 'Minutes',
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
       ));
@@ -76,8 +76,9 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
       appBar: AppBar(
         actions: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 5, 15, 5),
+            padding: EdgeInsets.only(right: 15),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: createTimeDisplay(),
             ),
           ),
@@ -94,20 +95,18 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
               itemCount: SubmitFeedbackScreen.criteria.length,
               itemBuilder: (context, i) {
                 return Card(
-                  elevation: 10.0,
+                  elevation: 2.0,
                   child: ExpansionTile(
                     title: Row(
                       children: <Widget>[
                         Text(
                           SubmitFeedbackScreen.criteria[i].criteria,
                           style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(
-                          width: 12.5,
-                        ),
+                        SizedBox(width: 12.5),
                       ],
                     ),
                     children: <Widget>[
@@ -219,7 +218,6 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
               ),
               direction: Axis.horizontal,
               onRatingUpdate: (value) {
-
                 FocusScope.of(context).unfocus();
 
                 setState(() {

@@ -14,7 +14,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 final _firestore = FirebaseFirestore.instance;
 final _authHelper = FirebaseAuthHelper();
 
-
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
 
@@ -60,32 +59,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 17.5,
               ),
               TextField(
-                keyboardType: TextInputType.visiblePassword
-                ,
+                keyboardType: TextInputType.visiblePassword,
                 enableSuggestions: false,
                 textAlign: TextAlign.center,
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   email = value;
                 },
-                decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Email Address'),),
+                decoration:
+                    kTextFieldDecoration.copyWith(hintText: 'Email Address'),
+              ),
               SizedBox(
-                height: 10.0,
+                height: 8.0,
               ),
               TextField(
                 enableSuggestions: false,
+                maxLength: 14,
                 keyboardType: TextInputType.visiblePassword,
                 textAlign: TextAlign.center,
                 textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   username = value;
                 },
-                decoration:
-                kTextFieldDecoration.copyWith(hintText: 'Username'),
+                decoration: kTextFieldDecoration.copyWith(hintText: 'Username'),
               ),
               SizedBox(
-                height: 10.0,
+                height: 8,
               ),
               TextField(
                 keyboardType: TextInputType.visiblePassword,
@@ -95,22 +94,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 onChanged: (value) {
                   password = value;
                 },
-                decoration:
-                kTextFieldDecoration.copyWith(hintText: 'Password'),
+                decoration: kTextFieldDecoration.copyWith(hintText: 'Password'),
               ),
               SizedBox(
-                height: 10,
+                height: 8,
               ),
               RoundedButton(
                 color: kDarkBlueCompliment,
                 title: 'Register',
                 onPressed: () async {
-
                   FocusScope.of(context).unfocus();
 
                   if (passwordIsSufficient() &&
                       emailIsSufficient() &&
-                      usernameIsSufficient() && await usernameAndEmailAreAvailable()) {
+                      usernameIsSufficient() &&
+                      await usernameAndEmailAreAvailable()) {
                     _gatherUserInterests();
                   }
                 },
@@ -121,7 +119,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
     );
   }
-
 
   Future<void> _gatherUserInterests() async {
     CategoryListView listView = CategoryListView(
@@ -147,7 +144,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             'Select Your Interests',
             style: TextStyle(
               fontSize: 20,
-              fontFamily: 'Roboto',
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -228,17 +224,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     FirestoreHelper helper = FirestoreHelper();
 
-    usernameIsAvailable = await helper.usernameIsAvailable(username.toLowerCase());
+    usernameIsAvailable =
+        await helper.usernameIsAvailable(username.toLowerCase());
     emailIsAvailable = await helper.emailIsAvailable(email.toLowerCase());
 
     if (usernameIsAvailable == false) {
-      AlertHelper helper = AlertHelper(title: 'Username Unavailable', body: 'Please enter a different username');
+      AlertHelper helper = AlertHelper(
+          title: 'Username Unavailable',
+          body: 'Please enter a different username');
       helper.generateAlert(context);
       bothAreAvailable = false;
     }
 
     if (emailIsAvailable == false) {
-      AlertHelper helper = AlertHelper(title: 'Email Unavailable', body: 'There is already an account registered to this email address');
+      AlertHelper helper = AlertHelper(
+          title: 'Email Unavailable',
+          body: 'There is already an account registered to this email address');
       helper.generateAlert(context);
       bothAreAvailable = false;
     }

@@ -34,7 +34,6 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
     authHelper = FirebaseAuthHelper();
   }
 
-
   @override
   Widget build(BuildContext context) {
     tabs = _buildTabs();
@@ -101,7 +100,8 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
     List<ProjectTile> filtered = [];
 
     for (ProjectObject p in projects) {
-      if (p.title.toLowerCase().contains(query)) {
+      if (p.uid != FirebaseAuthHelper.loggedInUser.uid &&
+          p.title.toLowerCase().contains(query)) {
         filtered.add(ProjectTile(
           state: ProjectTileState.viewingUserProject,
           project: p,
@@ -166,7 +166,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
             }
           }
           return ListView(
-            padding: EdgeInsets.all(7.5),
+            padding: EdgeInsets.all(5),
             children: _isSearching == false
                 ? listTiles
                 : filteredProjectTiles(searchQuery),
@@ -222,7 +222,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
             }
           }
           return ListView(
-            padding: EdgeInsets.all(7.5),
+            padding: EdgeInsets.all(5),
             children: _isSearching == false
                 ? listTiles
                 : filteredProjectTiles(searchQuery),
@@ -281,8 +281,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
 
     listTiles = [];
 
-
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _isSearching = true;
       });
@@ -290,7 +289,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
   }
 
   void updateSearchQuery(String newQuery) {
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         searchQuery = newQuery.toLowerCase();
       });
@@ -299,7 +298,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
 
   void _stopSearching() {
     _clearSearchQuery();
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _isSearching = false;
       });
@@ -307,7 +306,7 @@ class _SearchProjectsScreenState extends State<SearchProjectsScreen> {
   }
 
   void _clearSearchQuery() {
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _searchQueryController.clear();
         updateSearchQuery("");

@@ -420,7 +420,6 @@ class _ImageContentState extends State<ImageContent> {
             'Add A Title/Description',
             style: TextStyle(
               fontSize: 20,
-              fontFamily: 'Roboto',
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -515,14 +514,13 @@ class _ImageContentState extends State<ImageContent> {
             'Edit Content Details',
             style: TextStyle(
               fontSize: 20,
-              fontFamily: 'Roboto',
               fontWeight: FontWeight.w600,
             ),
           ),
           children: [
             Container(
               width: 250,
-              height: 175,
+              height: 187.5,
               child: Column(
                 children: [
                   Padding(

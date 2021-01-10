@@ -33,8 +33,8 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ModalProgressHUD(
+    return Container(
+      child: ModalProgressHUD(
         inAsyncCall: isLoading,
         child: ProjectStream(
           state: ProjectStreamState.myProjects,
@@ -100,11 +100,10 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
           builder: (context, setState) {
             return SimpleDialog(
               title: Text(
-                'Boost "${project.title}"',
+                "Boost '${project.title}'",
                 style: TextStyle(
                   fontSize: 22.5,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
               children: [
@@ -114,7 +113,7 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 15),
+                          vertical: 10, horizontal: 20),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: AspectRatio(
@@ -163,12 +162,12 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                     Text(
                       sponsoredText,
                       style: TextStyle(
-                          fontSize: 22.5, fontWeight: FontWeight.w400),
+                          fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                     Text(
                       '   =   $creditsToSponsor Credits',
                       style: TextStyle(
-                          fontSize: 22.5, fontWeight: FontWeight.w400),
+                          fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),

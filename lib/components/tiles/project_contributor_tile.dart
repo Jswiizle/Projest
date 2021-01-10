@@ -18,7 +18,7 @@ class ProjectContributorTile extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           elevation: 1.5,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            padding: const EdgeInsets.fromLTRB(7.5, 10, 7.5, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -42,8 +42,7 @@ class ProjectContributorTile extends StatelessWidget {
                       ? project.projectOwnerUsername
                       : "",
                   style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Roboto',
+                    fontSize: 10.5,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

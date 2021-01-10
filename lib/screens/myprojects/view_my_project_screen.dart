@@ -28,7 +28,8 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
 
   ImageProvider provider;
 
-  TextEditingController descriptionController = TextEditingController(text: ViewMyProjectScreen.p.description);
+  TextEditingController descriptionController =
+      TextEditingController(text: ViewMyProjectScreen.p.description);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,12 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
-          title: Text(ViewMyProjectScreen.p.title),
+          title: Text(
+            ViewMyProjectScreen.p.title,
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 25),
@@ -79,7 +85,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
+        body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -105,18 +111,17 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 2.5),
+                padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 5),
                 child: Row(
                   children: [
                     Text(
                       'Description',
                       style: TextStyle(
-                        fontFamily: 'Roboto',
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
                         _presentEditAlert(
@@ -129,32 +134,34 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0.0, 20, 25.0),
-                child: TextField(
-                  controller: descriptionController,
-                  enabled: false,
-                  maxLines: null,
+                child: Container(
+                  height: 67.5,
+                  child: SingleChildScrollView(
+                    child: TextField(
+                      controller: descriptionController,
+                      enabled: false,
+                      maxLines: null,
+                    ),
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 7.5),
+                padding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 5),
                 child: Text(
                   'Project Feedback',
-                  style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                 ),
               ),
-              Container(
-                  height: 175,
-                  child: FeedbackListView(
-                project: ViewMyProjectScreen.p,
-                refreshCallback: () {
-                  setState(() {});
-                },
-              )),
+              Expanded(
+                child: FeedbackListView(
+                  project: ViewMyProjectScreen.p,
+                  refreshCallback: () {
+                    setState(() {});
+                  },
+                ),
+              ),
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 15, 20, 5),
+                padding: EdgeInsets.fromLTRB(20, 15, 20, 0),
                 child: RoundedButton(
                   color: kPrimaryColor,
                   title: 'Change Project Thumbnail',
@@ -168,12 +175,13 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                 child: FlatButton(
                   child: Text(
                     'Delete Project',
-                    style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        color: kPrimaryColor, fontWeight: FontWeight.w500),
                   ),
                   onPressed: () {
                     print('Pressed');
                     AlertHelper helper = AlertHelper(
-                      choice1: 'Delete Project',
+                      choice1: 'Delete',
                       choice2: 'Cancel',
                       title: 'Are you sure?',
                       body:
@@ -207,8 +215,8 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
   Future<void> _presentEditAlert(EditTextAlertState state) async {
     switch (state) {
       case EditTextAlertState.editingDescription:
-
-        TextEditingController controller = TextEditingController(text: ViewMyProjectScreen.p.description);
+        TextEditingController controller =
+            TextEditingController(text: ViewMyProjectScreen.p.description);
 
         String newDescription;
         await showDialog(
@@ -219,7 +227,6 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                 'Edit Project Description',
                 style: TextStyle(
                   fontSize: 20,
-                  fontFamily: 'Roboto',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -254,9 +261,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                     title: 'Save',
                     color: kPrimaryColor,
                     onPressed: () async {
-
                       if (newDescription != null) {
-
                         setState(() {
                           descriptionController.text = newDescription;
                           ViewMyProjectScreen.p.description = newDescription;
@@ -275,8 +280,8 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
         );
         break;
       case EditTextAlertState.editingTitle:
-
-        TextEditingController controller = TextEditingController(text: ViewMyProjectScreen.p.title);
+        TextEditingController controller =
+            TextEditingController(text: ViewMyProjectScreen.p.title);
 
         String newTitle;
         await showDialog(
@@ -287,7 +292,6 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                 'Edit Project Title',
                 style: TextStyle(
                   fontSize: 20,
-                  fontFamily: 'Roboto',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -317,9 +321,7 @@ class _ViewMyProjectScreenState extends State<ViewMyProjectScreen> {
                     title: 'Save',
                     color: kPrimaryColor,
                     onPressed: () async {
-
                       if (newTitle != null) {
-
                         setState(() {
                           ViewMyProjectScreen.p.title = newTitle;
                         });

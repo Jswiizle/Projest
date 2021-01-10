@@ -201,7 +201,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 'Change Email Address',
                 style: TextStyle(
                   fontSize: 20,
-                  fontFamily: 'Roboto',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -259,7 +258,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 'Change Username',
                 style: TextStyle(
                   fontSize: 20,
-                  fontFamily: 'Roboto',
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -314,11 +312,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     await Permission.photos.request();
 
     if (await Permission.photos.isGranted) {
+
+      print('Permission is granted');
+
       PickedFile pickedFile = await ImagePicker().getImage(
         source: ImageSource.gallery,
       );
 
+      print('got it');
+
       if (pickedFile != null) {
+
+        print('File exists');
+
         _cropImage(pickedFile.path);
       }
     }

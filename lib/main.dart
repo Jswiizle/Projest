@@ -22,6 +22,7 @@ class Projest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: 'Roboto'),
       debugShowCheckedModeBanner: false,
       initialRoute: WelcomeScreen.id,
       routes: {
@@ -44,13 +45,13 @@ class Projest extends StatelessWidget {
 
 //IMMEDIATE BUG FIXES
 
-
 //MASTER TO_DO
 
 //TODO: - Import the old firebase database
-//TODO: - Change all fonts to roboto
 
 //TODO: - (V-1.1) - Add support for tablets
+//TODO: - (V-1.1) - Display version in the settings screen
+//TODO: - (V-1.1) - Add youtube content support using plugin
 
 //TODO: - (V2) Set up Pinterest style layout - dynamic cell height
 //TODO: - (V2) Create custom alert for displaying content info
@@ -63,124 +64,18 @@ class Projest extends StatelessWidget {
 //TODO: - (VX) Allow users to add multiple project contributors
 //TODO: - (VX) Filter search results on project stream instead of locally - once there are a lot of projects
 
-//SIMULATOR iOS FUNCTION TESTING TO_DO - USE VIRTUAL KEYBOARD!!
-
-//TODO: + Uploading a web project
-//TODO: + Uploading an image project
-//TODO: + Uploading a web+image project
-//TODO: + Uploading WITH a thumbnail
-//TODO: + Uploading WITHOUT a thumbnail
-//TODO: + Creating a new account
-//TODO: + Edit project title
-//TODO: + Edit project description
-//TODO: + Edit web content
-//TODO: + Edit web content description
-//TODO: + Edit image content
-//TODO: + Edit image content description
-//TODO: + Searching projects
-//TODO: + Signing in - try with invalid fields
-//TODO: + Changing profile image
-//TODO: + Deleting a project
-//TODO: + Add project thumbnail to project with default
-//TODO: + Editing project thumbnail
-//TODO: + Changing profile email
-//TODO: + Adding image content to existing
-//TODO: + Adding web content to existing
-//TODO: + Reviewing a image project
-//TODO: + Reviewing a web project
-//TODO: + Reviewing a web+image project
-//TODO: + Submitting feedback
-//TODO: + Submitting feedback on a sponsored project (bool for projectWasSponsored in feedback so that if it is rated after sponsorship ends user still gets 2x points?)
-//TODO: + Rating feedback
-//TODO: + Test leveling up points to give - make sure it loops through projects
-//TODO: + Submit a project complaint
-//TODO: + Delete a project complaint
-//TODO: + Block a user
-//TODO: + Unblock a user
-
-//SIMULATOR Android FUNCTION TESTING TO_DO
-
-//TODO: + Uploading a web project
-//TODO: + Uploading an image project
-//TODO: + Uploading a web+image project
-//TODO: + Uploading WITH a thumbnail
-//TODO: + Uploading WITHOUT a thumbnail
-//TODO: + Creating a new account
-//TODO: + Edit project title
-//TODO: + Edit project description
-//TODO: + Edit web content
-//TODO: + Edit web content description
-//TODO: + Edit image content
-//TODO: + Edit image content description
-//TODO: + Searching projects
-//TODO: + Signing in - try with invalid fields
-//TODO: + Changing profile image
-//TODO: + Deleting a project
-//TODO: + Add project thumbnail to project with default
-//TODO: + Editing project thumbnail
-//TODO: + Changing profile email
-//TODO: + Adding image content to existing
-//TODO: + Adding web content to existing
-//TODO: + Reviewing a image project
-//TODO: + Reviewing a web project
-//TODO: + Reviewing a web+image project
-//TODO: + Submitting feedback
-//TODO: + Submitting feedback on a sponsored project
-//TODO: + Rating feedback
-//TODO: + Test leveling up points to give - make sure it loops through projects
-//TODO: + Submit a project complaint
-//TODO: + Delete a project complaint
-//TODO: + Block a user
-//TODO: + Unblock a user
-
-
-//DEVICE Android FUNCTION TESTING TO_DO
-
-//TODO: + Uploading a web project
-//TODO: + Uploading an image project
-//TODO: + Uploading a web+image project
-//TODO: + Uploading WITH a thumbnail
-//TODO: + Uploading WITHOUT a thumbnail
-//TODO: + Creating a new account
-//TODO: + Edit project title
-//TODO: + Edit project description
-//TODO: + Edit web content
-//TODO: + Edit web content description
-//TODO: + Edit image content
-//TODO: + Edit image content description
-//TODO: + Searching projects
-//TODO: + Signing in - try with invalid fields
-//TODO: + Changing profile image
-//TODO: + Deleting a project
-//TODO: + Add project thumbnail to project with default
-//TODO: + Editing project thumbnail
-//TODO: + Changing profile email
-//TODO: + Adding image content to existing
-//TODO: + Adding web content to existing
-//TODO: + Reviewing a image project
-//TODO: + Reviewing a web project
-//TODO: + Reviewing a web+image project
-//TODO: + Submitting feedback
-//TODO: + Submitting feedback on a sponsored project
-//TODO: + Rating feedback
-//TODO: + Test leveling up points to give - make sure it loops through projects
-//TODO: + Submit a project complaint
-//TODO: + Delete a project complaint
-//TODO: + Block a user
-//TODO: + Unblock a user
-
-//iOS DEVICE FUNCTION TESTING TO_DO
+//FUNCTION TESTING TO_DO
 
 //TODO: - Uploading a web project
-//TODO: + Uploading an image project
+//TODO: - Uploading an image project
 //TODO: - Uploading a web+image project
-//TODO: + Uploading WITH a thumbnail
-//TODO: + Uploading WITHOUT a thumbnail
+//TODO: - Uploading WITH a thumbnail
+//TODO: - Uploading WITHOUT a thumbnail
 //TODO: - Creating a new account
-//TODO: + Edit project title
-//TODO: + Edit project description
-//TODO: + Edit web content
-//TODO: + Edit web content description
+//TODO: - Edit project title
+//TODO: - Edit project description
+//TODO: - Edit web content
+//TODO: - Edit web content description
 //TODO: - Edit image content
 //TODO: - Edit image content description
 //TODO: - Searching projects
@@ -204,8 +99,7 @@ class Projest extends StatelessWidget {
 //TODO: - Block a user
 //TODO: - Unblock a user
 
-
-//iOS iPhones SCREEN SIZE TESTING TO_DO
+//SCREEN SIZE TESTING TO_DO
 
 // TODO: - Login screen
 // TODO: - Register screen
@@ -223,60 +117,3 @@ class Projest extends StatelessWidget {
 // TODO: - Submit feedback screen
 // TODO: - View profile screen
 // TODO: - View user project screen
-
-//iOS iPads SCREEN SIZE TESTING TO_DO
-
-//TODO: - Login screen
-//TODO: - Register screen
-//TODO: - Welcome screen
-//TODO: - View project content screen
-//TODO: - My projects screen
-//TODO: - Add projects screen
-//TODO: - Project content cover page
-//TODO: - View my project screen
-//TODO: - View received feedback screen
-//TODO: - My profile screen
-//TODO: - Image content screen
-//TODO: - Web content screen
-//TODO: - Search projects screen
-//TODO: - Submit feedback screen
-//TODO: - View profile screen
-//TODO: - View user project screen
-
-//Android Phones SCREEN SIZE TESTING TO_DO
-
-//TODO: - Login screen
-//TODO: - Register screen
-//TODO: - Welcome screen
-//TODO: - View project content screen
-//TODO: - My projects screen
-//TODO: - Add projects screen
-//TODO: - Project content cover page
-//TODO: - View my project screen
-//TODO: - View received feedback screen
-//TODO: - My profile screen
-//TODO: - Image content screen
-//TODO: - Web content screen
-//TODO: - Search projects screen
-//TODO: - Submit feedback screen
-//TODO: - View profile screen
-//TODO: - View user project screen
-
-//Android Tablets SCREEN SIZE TESTING TO_DO
-
-//TODO: - Login screen
-//TODO: - Register screen
-//TODO: - Welcome screen
-//TODO: - View project content screen
-//TODO: - My projects screen
-//TODO: - Add projects screen
-//TODO: - Project content cover page
-//TODO: - View my project screen
-//TODO: - View received feedback screen
-//TODO: - My profile screen
-//TODO: - Image content screen
-//TODO: - Web content screen
-//TODO: - Search projects screen
-//TODO: - Submit feedback screen
-//TODO: - View profile screen
-//TODO: - View user project screen

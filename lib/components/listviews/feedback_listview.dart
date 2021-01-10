@@ -37,7 +37,7 @@ class FeedbackListView extends StatelessWidget {
     }
 
     return ListView(
-      padding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 20.0),
+      padding: EdgeInsets.fromLTRB(17.5, 5.0, 17.5, 20.0),
       shrinkWrap: true,
       children: tiles,
     );

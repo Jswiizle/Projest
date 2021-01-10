@@ -12,33 +12,28 @@ class FeedbackTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: ListTile(
-          onTap: onTap,
-          trailing: feedback.rated
-              ? null
-              : Icon(Icons.feedback, color: kLightOrangeCompliment),
-          leading: CircleAvatar(
-            backgroundImage: feedback.senderProfileImageUrl != null
-                ? NetworkImage(feedback.senderProfileImageUrl)
-                : AssetImage('images/profile.png'),
+      child: ListTile(
+        onTap: onTap,
+        trailing: feedback.rated
+            ? null
+            : Icon(Icons.feedback, color: kLightOrangeCompliment),
+        leading: CircleAvatar(
+          backgroundImage: feedback.senderProfileImageUrl != null
+              ? NetworkImage(feedback.senderProfileImageUrl)
+              : AssetImage('images/profile.png'),
+        ),
+        title: Text(
+          feedback.senderUsername,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
           ),
-          title: Text(
-            feedback.senderUsername,
-            style: TextStyle(
-              fontSize: 22.5,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          subtitle: Text(
-            createDateString(),
-            style: TextStyle(
-              fontSize: 15,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.w100,
-            ),
+        ),
+        subtitle: Text(
+          createDateString(),
+          style: TextStyle(
+            fontSize: 13.5,
+            fontWeight: FontWeight.w100,
           ),
         ),
       ),

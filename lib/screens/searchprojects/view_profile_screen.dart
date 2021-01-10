@@ -17,7 +17,6 @@ class ViewProfileScreen extends StatefulWidget {
 }
 
 class _ViewProfileScreenState extends State<ViewProfileScreen> {
-
   ImageProvider avatarProvider;
 
   @override
@@ -29,13 +28,13 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
-        title: Text("${capitalize(widget.user.username)}'s Profile"),
+        title: Text("${capitalize(widget.user.username)}'s Profile",
+            style: TextStyle(fontSize: 18)),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 17.5),
@@ -85,7 +84,7 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              SizedBox(height: 40),
+              SizedBox(height: 30),
               CircleAvatar(
                 radius: 75.75,
                 backgroundColor: kDarkBlueCompliment,
@@ -108,12 +107,11 @@ class _ViewProfileScreenState extends State<ViewProfileScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 75,),
+              SizedBox(height: 60),
               Text(
-                'Projects',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                "${capitalize(widget.user.username)}'s Projects",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
-              SizedBox(height: 5),
               Expanded(
                 child: ProjectStream(
                   projectObject: ViewUserProjectScreen.p,

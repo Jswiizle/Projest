@@ -18,7 +18,6 @@ class AddProjectContentTile extends StatelessWidget {
           child: Text(
             "Add Content",
             style: TextStyle(
-              fontFamily: 'Roboto',
               fontSize: 17.5,
               fontWeight: FontWeight.w500,
             ),
