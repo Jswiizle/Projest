@@ -22,7 +22,6 @@ class Projest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      checkerboardOffscreenLayers: false,
       theme: ThemeData(fontFamily: 'Roboto'),
       initialRoute: WelcomeScreen.id,
       routes: {
