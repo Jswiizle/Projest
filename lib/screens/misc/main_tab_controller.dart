@@ -8,6 +8,7 @@ import '../profile/my_profile_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:projest/screens/profile/settings_screen.dart';
 import 'package:projest/constants.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MainTabController extends StatefulWidget {
   static const String id = 'tab_controller';
@@ -17,6 +18,7 @@ class MainTabController extends StatefulWidget {
 }
 
 class _MainTabControllerState extends State<MainTabController> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   int _currentIndex = 0;
   bool _showSpinner = false;
   List<Widget> tabs = [];
@@ -106,19 +108,36 @@ class _MainTabControllerState extends State<MainTabController> {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     tabs = [
       MyProjectsScreen(),
       SearchProjectsScreen(),
       MyProfileScreen(),
     ];
 
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return ModalProgressHUD(
       inAsyncCall: _showSpinner,
       child: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          // floatingActionButton: configureFloatingActionButton(),
           appBar: _currentIndex != 1
               ? AppBar(
                   leading: configureAppBarLeading(),
@@ -143,7 +162,6 @@ class _MainTabControllerState extends State<MainTabController> {
       ),
     );
   }
-
 
   void _toggleSpinner() {
     setState(() {

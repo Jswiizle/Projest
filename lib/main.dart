@@ -19,8 +19,10 @@ void main() async {
 }
 
 class Projest extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       theme: ThemeData(fontFamily: 'Roboto'),
       initialRoute: WelcomeScreen.id,
@@ -47,7 +49,6 @@ class Projest extends StatelessWidget {
 //MASTER TO_DO
 
 //TODO: - Import the old firebase database
-//TODO: - Bogus To-do
 
 //TODO: - (V-1.1) - Add support for tablets
 //TODO: - (V-1.1) - Display version in the settings screen

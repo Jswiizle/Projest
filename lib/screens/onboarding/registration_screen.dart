@@ -10,6 +10,7 @@ import 'package:projest/screens/misc/main_tab_controller.dart';
 import 'package:projest/models/objects/category_object.dart';
 import 'package:projest/components/listviews/category_listview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 final _firestore = FirebaseFirestore.instance;
 final _authHelper = FirebaseAuthHelper();
@@ -264,12 +265,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   _createAccount() async {
+
     _toggleSpinner();
+
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+    String token = await _firebaseMessaging.getToken();
 
     final status =
         await FirebaseAuthHelper().createAccount(email: email, pass: password);
     if (status == AuthResultStatus.successful) {
       UserObject newUserObject = UserObject(
+        fcmToken: token,
         uid: _authHelper.auth.currentUser.uid,
         interestArray: _convertInterestsToJson(categories),
         password: password,
