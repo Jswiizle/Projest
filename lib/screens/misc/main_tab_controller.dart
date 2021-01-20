@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projest/helpers/alert_helper.dart';
 import 'package:projest/helpers/firebase_helper.dart';
+import 'package:projest/main.dart';
 import 'package:projest/screens/myprojects/add_project_screen.dart';
 import '../myprojects/my_projects_screen.dart';
 import '../searchprojects/search_projects_screen.dart';
@@ -21,7 +22,68 @@ class _MainTabControllerState extends State<MainTabController> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   int _currentIndex = 0;
   bool _showSpinner = false;
+  bool notificationsConfigured = false;
   List<Widget> tabs = [];
+
+  final navigationBarItems = [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.poll),
+      label: 'My Projects',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.search),
+      label: 'Search Projects',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: 'Profile',
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    tabs = [
+      MyProjectsScreen(),
+      SearchProjectsScreen(),
+      MyProfileScreen(),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (notificationsConfigured == false) {
+      _configureNotifications();
+    }
+    return ModalProgressHUD(
+      inAsyncCall: _showSpinner,
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          appBar: _currentIndex != 1
+              ? AppBar(
+                  leading: configureAppBarLeading(),
+                  actions: configureAppBarActions(),
+                  automaticallyImplyLeading: false,
+                  title: Text(navigationBarItems[_currentIndex].label),
+                  backgroundColor: Colors.lightBlueAccent,
+                )
+              : null,
+          bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: kPrimaryColor,
+            currentIndex: _currentIndex,
+            items: navigationBarItems,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+          body: tabs[_currentIndex],
+        ),
+      ),
+    );
+  }
 
   List<Widget> configureAppBarActions() {
     if (_currentIndex == 0) {
@@ -92,75 +154,37 @@ class _MainTabControllerState extends State<MainTabController> {
     }
   }
 
-  final navigationBarItems = [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.poll),
-      label: 'My Projects',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.search),
-      label: 'Search Projects',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person),
-      label: 'Profile',
-    ),
-  ];
+  void _configureNotifications() {
+    print('Configuring notifications');
 
-  @override
-  void initState() {
-    super.initState();
+    bool isAndroid = Theme.of(context).platform == TargetPlatform.android;
 
-    tabs = [
-      MyProjectsScreen(),
-      SearchProjectsScreen(),
-      MyProfileScreen(),
-    ];
+    print('Is android= = $isAndroid');
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
       },
+      onBackgroundMessage: isAndroid ? myBackgroundMessageHandler : null,
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
       },
       onResume: (Map<String, dynamic> message) async {
+        //TODO: Parse message and determine which screen to go to
         print("onResume: $message");
       },
     );
-  }
 
-  @override
-  Widget build(BuildContext context) {
+    _firebaseMessaging.getToken().then((t) async {
+      print(t);
 
-    return ModalProgressHUD(
-      inAsyncCall: _showSpinner,
-      child: WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(
-          appBar: _currentIndex != 1
-              ? AppBar(
-                  leading: configureAppBarLeading(),
-                  actions: configureAppBarActions(),
-                  automaticallyImplyLeading: false,
-                  title: Text(navigationBarItems[_currentIndex].label),
-                  backgroundColor: Colors.lightBlueAccent,
-                )
-              : null,
-          bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: kPrimaryColor,
-            currentIndex: _currentIndex,
-            items: navigationBarItems,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-          ),
-          body: tabs[_currentIndex],
-        ),
-      ),
-    );
+      if (FirebaseAuthHelper.loggedInUser.fcmTokens.contains(t) == false) {
+        FirestoreHelper helper = FirestoreHelper();
+        await helper.addFcmToken(t);
+      }
+    });
+
+    notificationsConfigured = true;
   }
 
   void _toggleSpinner() {

@@ -265,7 +265,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   _createAccount() async {
-
     _toggleSpinner();
 
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -276,7 +275,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         await FirebaseAuthHelper().createAccount(email: email, pass: password);
     if (status == AuthResultStatus.successful) {
       UserObject newUserObject = UserObject(
-        fcmToken: token,
+        fcmTokens: [token],
         uid: _authHelper.auth.currentUser.uid,
         interestArray: _convertInterestsToJson(categories),
         password: password,

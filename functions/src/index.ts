@@ -3,41 +3,43 @@ import * as admin from 'firebase-admin'
 
 admin.initializeApp()
 
-// const db = admin.firestore();
-
 exports.currentUserUpdated = functions.firestore.document('/Projects/{docID}').onUpdate((event, context) => {
 
     let projectName = String(event.after.get('title'))
+    let projectOwnerTokens : Array<String> = event.after.get('ownerTokens')
 
-    let projectOwnerToken = String(event.after.get('ownerToken'))
-
-    let oldRatedByUID = event.before.get('ratedByUID')
-    let newRatedByUID = event.after.get('ratedByUID')
+    let oldRatedByUids = event.before.get('ratedByUids')
+    let newRatedByUids = event.after.get('ratedByUids')
 
     let oldFeedbackArray = event.before.get('feedbackArray')
     let newFeedbackArray = event.after.get('feedbackArray')
 
-    var bodyText = ""
 
-    if (String(oldRatedByUID) != String(newRatedByUID)) {
+    if (Array<String>(oldRatedByUids) != Array<String>(newRatedByUids)) {
 
-        if (projectOwnerToken) {
+        //Feedback received
 
-            if (projectOwnerToken != "" || projectOwnerToken != null) {
+        if (projectOwnerTokens) {
 
-                bodyText = "You have new feedback on your project"
+            for (var t of projectOwnerTokens) {
+
+                console.log(t)
 
                 const message = {
+
+                    data: {
+                        click_action: "FLUTTER_NOTIFICATION_CLICK",
+                    },
         
                     notification: {
                         title: "Incoming Feedback",
-                        body: "You have new feedback on your project: '" + projectName + "'"
+                        body: "You have new feedback on your project: '" + projectName + "'",
                     },
             
-                    token: projectOwnerToken
+                    token: String(t)
                 }
                 
-                return admin.messaging().send(message)
+                admin.messaging().send(message)
                 .catch(error=> {
             
                     console.error("FCM Failed", error)
@@ -57,25 +59,21 @@ exports.currentUserUpdated = functions.firestore.document('/Projects/{docID}').o
 
                 if (feedback.senderID == oldFback.senderID && feedback.rated != oldFback.rated) {
 
-                    if (feedback.senderToken) {
+                    if (feedback.senderTokens) {
 
-                        if (feedback.senderToken != "") {
+                        for (let t in feedback.senderTokens) {
 
-                            const newToken : string = feedback.senderToken 
-                            
-                            bodyText = "Your feedback on '" + projectName + "' has been rated"
-    
                             const message = {
     
                                 notification: {
                                     title: "Feedback Rated",
-                                    body: bodyText
+                                    body: "Your feedback on '" + projectName + "' has been rated"
                                 },
                         
-                                token: newToken
+                                token: t
                             }
                                             
-                            return admin.messaging().send(message)
+                            admin.messaging().send(message)
                             .catch(error=> {
                         
                                 console.error("FCM Failed", error)

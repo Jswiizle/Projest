@@ -19,10 +19,8 @@ void main() async {
 }
 
 class Projest extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       theme: ThemeData(fontFamily: 'Roboto'),
       initialRoute: WelcomeScreen.id,
@@ -44,7 +42,25 @@ class Projest extends StatelessWidget {
   }
 }
 
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  print('handler called');
+
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+    print('title: ${data['title']}, body: ${data['body']}');
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+    print(notification);
+  }
+}
+
 //IMMEDIATE BUG FIXES
+
+//TODO: - Create array of FCM tokens so one user can have multiple tokens
 
 //MASTER TO_DO
 

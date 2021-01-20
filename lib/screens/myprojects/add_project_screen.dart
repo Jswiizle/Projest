@@ -467,6 +467,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
     }
 
     ProjectObject p = ProjectObject(
+      ratedByUids: [],
+      ownerTokens: FirebaseAuthHelper.loggedInUser.fcmTokens,
       flaggedByUid: [],
       blipArray: blipArray,
       title: projectTitle,

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:projest/models/objects/feedback_object.dart';
 import '../models/objects/user_object.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -155,9 +156,6 @@ class FirestoreHelper {
         .doc(FirebaseAuthHelper.loggedInUser.uid)
         .set(FirebaseAuthHelper.loggedInUser.toJson());
 
-    print(
-        'Update current user called. Email for user object is ${FirebaseAuthHelper.loggedInUser.email} and auth user is ${FirebaseAuthHelper.authUser.email}');
-
     if (FirebaseAuthHelper.loggedInUser.email !=
         FirebaseAuthHelper.authUser.email) {
       FirebaseAuthHelper helper = FirebaseAuthHelper();
@@ -179,6 +177,55 @@ class FirestoreHelper {
         updateFailed();
       }
     }
+  }
+
+  Future<void> addFcmToken(String token) async {
+    FirebaseAuthHelper.loggedInUser.fcmTokens.add(token);
+
+    await updateCurrentUser();
+
+    //Update user's projects
+
+    await _firestore
+        .collection('Projects')
+        .where('uid', isEqualTo: FirebaseAuthHelper.loggedInUser.uid)
+        .get()
+        .then((p) async {
+      if (p.docs.length > 0) {
+        for (var d in p.docs) {
+          ProjectObject project = ProjectObject.fromJson(d.data());
+          project.ownerTokens = FirebaseAuthHelper.loggedInUser.fcmTokens;
+          await updateProject(project);
+        }
+      }
+    });
+
+    //Update feedback given
+
+    await _firestore
+        .collection('Projects')
+        .where('ratedByUids',
+            arrayContains: FirebaseAuthHelper.loggedInUser.uid)
+        .get()
+        .then((p) async {
+      if (p.docs.length > 0) {
+        for (var d in p.docs) {
+          ProjectObject project = ProjectObject.fromJson(d.data());
+
+          for (var f in project.feedbackArray) {
+            FeedbackObject feedback = FeedbackObject.fromJson(f);
+
+            if (feedback.senderId == FirebaseAuthHelper.loggedInUser.uid) {
+              project.feedbackArray.remove(f);
+              feedback.senderTokens = FirebaseAuthHelper.loggedInUser.fcmTokens;
+              project.feedbackArray.add(feedback.toJson());
+            }
+          }
+
+          await updateProject(project);
+        }
+      }
+    });
   }
 
   Future<bool> usernameIsAvailable(String username) async {
