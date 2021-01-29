@@ -3,6 +3,7 @@ import 'package:projest/helpers/alert_helper.dart';
 import 'package:projest/helpers/firebase_helper.dart';
 import 'package:projest/main.dart';
 import 'package:projest/screens/myprojects/add_project_screen.dart';
+import 'package:projest/screens/myprojects/view_my_project_screen.dart';
 import '../myprojects/my_projects_screen.dart';
 import '../searchprojects/search_projects_screen.dart';
 import '../profile/my_profile_screen.dart';
@@ -10,6 +11,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:projest/screens/profile/settings_screen.dart';
 import 'package:projest/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:projest/models/objects/project_object.dart';
 
 class MainTabController extends StatefulWidget {
   static const String id = 'tab_controller';
@@ -53,7 +55,7 @@ class _MainTabControllerState extends State<MainTabController> {
   @override
   Widget build(BuildContext context) {
     if (notificationsConfigured == false) {
-      _configureNotifications();
+      _initFirebaseMessaging();
     }
     return ModalProgressHUD(
       inAsyncCall: _showSpinner,
@@ -154,24 +156,34 @@ class _MainTabControllerState extends State<MainTabController> {
     }
   }
 
-  void _configureNotifications() {
-    print('Configuring notifications');
-
+  void _initFirebaseMessaging() {
     bool isAndroid = Theme.of(context).platform == TargetPlatform.android;
 
-    print('Is android= = $isAndroid');
+    _firebaseMessaging.requestNotificationPermissions();
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
+        print('onMessage : $message');
+        return;
       },
       onBackgroundMessage: isAndroid ? myBackgroundMessageHandler : null,
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-      },
       onResume: (Map<String, dynamic> message) async {
-        //TODO: Parse message and determine which screen to go to
-        print("onResume: $message");
+        print('onResume : $message');
+        String projectId = isAndroid ? message['data']['pId'] : message['pId'];
+        FirestoreHelper helper = FirestoreHelper();
+        _toggleSpinner();
+        ProjectObject project = await helper.getProject(projectId);
+        ViewMyProjectScreen.p = project;
+        _toggleSpinner();
+        Navigator.pushNamed(context, ViewMyProjectScreen.id);
+
+        print('Done, project ID is: $projectId');
+
+        return;
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('onLaunch : $message');
+        return;
       },
     );
 

@@ -43,24 +43,22 @@ class Projest extends StatelessWidget {
 }
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
-  print('handler called');
+  print('Background handler called');
 
   if (message.containsKey('data')) {
     // Handle data message
     final dynamic data = message['data'];
-    print('title: ${data['title']}, body: ${data['body']}');
+    print('id: ${data['pId']}');
   }
 
   if (message.containsKey('notification')) {
     // Handle notification message
     final dynamic notification = message['notification'];
-    print(notification);
+    print('notification: $notification');
   }
 }
 
 //IMMEDIATE BUG FIXES
-
-//TODO: - Create array of FCM tokens so one user can have multiple tokens
 
 //MASTER TO_DO
 
