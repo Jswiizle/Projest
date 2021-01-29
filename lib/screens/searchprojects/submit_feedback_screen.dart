@@ -128,6 +128,12 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
               onPressed: () async {
                 widget.p.feedbackArray = [];
                 widget.p.feedbackArray.add(createFeedbackObject().toJson());
+
+                if (widget.p.ratedByUids == null) {
+                  widget.p.ratedByUids = [];
+                }
+
+                widget.p.ratedByUids.add(FirebaseAuthHelper.loggedInUser.uid);
                 ViewUserProjectScreen.p = widget.p;
                 FirestoreHelper helper = FirestoreHelper();
                 await helper.updateProject(widget.p);
@@ -149,6 +155,7 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
     }
 
     return FeedbackObject(
+      senderTokens: FirebaseAuthHelper.loggedInUser.fcmTokens,
       projectImageUrl: widget.p.profileImageLink,
       projectTitle: widget.p.title,
       senderProfileImageUrl: FirebaseAuthHelper.loggedInUser.profileImageLink,

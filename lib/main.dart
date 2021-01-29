@@ -42,12 +42,27 @@ class Projest extends StatelessWidget {
   }
 }
 
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  print('Background handler called');
+
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+    print('id: ${data['pId']}');
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+    print('notification: $notification');
+  }
+}
+
 //IMMEDIATE BUG FIXES
 
 //MASTER TO_DO
 
 //TODO: - Import the old firebase database
-//TODO: - Bogus To-do
 
 //TODO: - (V-1.1) - Add support for tablets
 //TODO: - (V-1.1) - Display version in the settings screen

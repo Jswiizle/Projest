@@ -18,8 +18,8 @@ class ProjectObject {
     this.id,
     this.contributorsUid,
     this.flaggedByUid,
-    this.ownerToken,
-    this.ratedByUID,
+    this.ownerTokens,
+    this.ratedByUids,
     this.selectedCriteria,
     this.boostedEndTime,
     this.boostedStartTime,
@@ -34,7 +34,7 @@ class ProjectObject {
   String uid;
   String id;
   List selectedCriteria;
-  List ratedByUID;
+  List<String> ratedByUids;
   List<Map<String, dynamic>> feedbackArray;
   List<Map<String, dynamic>> blipArray;
   double userPointsToGive;
@@ -43,7 +43,7 @@ class ProjectObject {
   double projectOwnerAverageResponseTime;
   Timestamp boostedStartTime;
   Timestamp boostedEndTime;
-  String ownerToken;
+  List<String> ownerTokens;
   List<String> flaggedByUid;
   Timestamp date;
 
@@ -57,7 +57,7 @@ class ProjectObject {
         'thumbnailLink': thumbnailLink,
         'id': id,
         'selectedCriteria': selectedCriteria,
-        'ratedByUID': ratedByUID,
+        'ratedByUids': ratedByUids,
         'feedbackArray': feedbackArray,
         'blipArray': blipArray,
         'userPointsToGive': userPointsToGive,
@@ -65,39 +65,47 @@ class ProjectObject {
         'projectOwnerAverageResponseTime': projectOwnerAverageResponseTime,
         'boostedStartTime': boostedStartTime,
         'boostedEndTime': boostedEndTime,
-        'ownerToken': ownerToken,
+        'ownerTokens': ownerTokens,
         'flaggedByUid': flaggedByUid,
         'date': date,
       };
 
   factory ProjectObject.fromJson(Map<String, dynamic> parsedJson) {
-    var jsonBArray = parsedJson['blipArray'];
-    var jsonFArray = parsedJson['feedbackArray'];
-    var jsonFlaggedByUid = parsedJson['flaggedByUid'];
-
     List<Map<String, dynamic>> bArray =
-        new List<Map<String, dynamic>>.from(jsonBArray);
+        new List<Map<String, dynamic>>.from(parsedJson['blipArray']);
 
     List<Map<String, dynamic>> fArray;
+    List<String> flaggedArray;
+    List<String> ratedByUid;
+    List<String> tokens;
+    double pointsToGive;
 
-    if (jsonFArray != null) {
-      fArray = List<Map<String, dynamic>>.from(jsonFArray);
+    if (parsedJson['feedbackArray'] != null) {
+      fArray = List<Map<String, dynamic>>.from(parsedJson['feedbackArray']);
     }
 
-    List<String> flaggedArray;
-
-    if (jsonFlaggedByUid == null) {
+    if (parsedJson['flaggedByUid'] == null) {
       flaggedArray = [];
     } else {
-      flaggedArray = List<String>.from(jsonFlaggedByUid);
+      flaggedArray = List<String>.from(parsedJson['flaggedByUid']);
     }
 
-    double pointsToGive;
+    if (parsedJson['ratedByUids'] == null) {
+      ratedByUid = [];
+    } else {
+      ratedByUid = List<String>.from(parsedJson['ratedByUids']);
+    }
 
     if (parsedJson['userPointsToGive'] is int) {
       pointsToGive = (parsedJson['userPointsToGive'] as int).toDouble();
     } else {
       pointsToGive = parsedJson['userPointsToGive'];
+    }
+
+    if (parsedJson['ownerTokens'] == null) {
+      tokens = [];
+    } else {
+      tokens = List<String>.from(parsedJson['ownerTokens']);
     }
 
     return ProjectObject(
@@ -108,7 +116,7 @@ class ProjectObject {
       category: parsedJson['category'],
       id: parsedJson['id'],
       selectedCriteria: parsedJson['selectedCriteria'],
-      ratedByUID: parsedJson['ratedByUID'],
+      ratedByUids: ratedByUid,
       feedbackArray: fArray != null ? fArray : null,
       blipArray: bArray,
       userPointsToGive: pointsToGive,
@@ -117,7 +125,7 @@ class ProjectObject {
           parsedJson['projectOwnerAverageResponseTime'],
       boostedStartTime: parsedJson['boostedStartTime'],
       boostedEndTime: parsedJson['boostedEndTime'],
-      ownerToken: parsedJson['ownerToken'],
+      ownerTokens: tokens,
       date: parsedJson['date'],
       description: parsedJson['description'],
       thumbnailLink: parsedJson['thumbnailLink'],

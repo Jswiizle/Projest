@@ -14,7 +14,7 @@ class UserObject {
       this.blockedByUid,
       this.blockedUsersUid,
       this.facebookUrl,
-      this.fcmToken,
+      this.fcmTokens,
       this.feedbackGivenArray,
       this.feedbackScoreArray,
       this.instagramUrl,
@@ -39,7 +39,7 @@ class UserObject {
   Timestamp joinDate;
   bool earlyAdopter;
   List<List> feedbackGivenArray;
-  String fcmToken;
+  List<String> fcmTokens;
   List<String> blockedByUid;
   List<String> blockedUsersUid;
   List<String> projectComplaintIdArray;
@@ -62,7 +62,7 @@ class UserObject {
         'joinDate': joinDate,
         'earlyAdopter': earlyAdopter,
         'feedbackGivenArray': feedbackGivenArray,
-        'fcmToken': fcmToken,
+        'fcmTokens': fcmTokens,
         'blockedByUid': blockedByUid,
         'blockedUsersUid': blockedUsersUid,
         'youtubeUrl': youtubeUrl,
@@ -85,6 +85,7 @@ class UserObject {
     List<String> blockedUsersUid = [];
     List<String> blockedByUid = [];
     List<String> projectComplaintIdArray = [];
+    List<String> tokens;
 
     if (parsedJson['blockedUsersUid'] != null) {
       blockedUsersUid = new List<String>.from(parsedJson['blockedUsersUid']);
@@ -115,6 +116,12 @@ class UserObject {
       points = parsedJson['points'];
     }
 
+    if (parsedJson['fcmTokens'] == null) {
+      tokens = [];
+    } else {
+      tokens = List<String>.from(parsedJson['fcmTokens']);
+    }
+
     return UserObject(
       profileImageLink: parsedJson['profileImageLink'],
       email: parsedJson['email'],
@@ -130,7 +137,7 @@ class UserObject {
       feedbackScoreArray: parsedJson['feedbackScoreArray'],
       earlyAdopter: parsedJson['earlyAdopter'],
       feedbackGivenArray: parsedJson['feedbackGivenArray'],
-      fcmToken: parsedJson['fcmToken'],
+      fcmTokens: tokens,
       blockedByUid: blockedByUid,
       blockedUsersUid: blockedUsersUid,
       projectComplaintIdArray: projectComplaintIdArray,

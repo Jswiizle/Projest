@@ -9,6 +9,7 @@ class FeedbackObject {
     this.id,
     this.senderUsername,
     this.senderProfileImageUrl,
+    this.senderTokens,
     this.timeStamp,
     this.ratedTimestamp,
     this.timeSpentReviewing,
@@ -20,11 +21,12 @@ class FeedbackObject {
   });
 
   List<dynamic> feedback;
-  String senderId;
   String uid;
   bool rated;
   String id;
   String senderUsername;
+  List<String> senderTokens;
+  String senderId;
   String senderProfileImageUrl;
   Timestamp timeStamp;
   Timestamp ratedTimestamp;
@@ -43,6 +45,7 @@ class FeedbackObject {
         'id': id,
         'senderUsername': senderUsername,
         'senderProfileImageUrl': senderProfileImageUrl,
+        'senderTokens': senderTokens,
         'timeStamp': timeStamp,
         'ratedTimestamp': ratedTimestamp,
         'timeSpentReviewing': timeSpentReviewing,
@@ -55,6 +58,13 @@ class FeedbackObject {
 
   factory FeedbackObject.fromJson(Map<String, dynamic> parsedJson) {
     List<dynamic> jsonFArray = parsedJson['feedback'];
+    List<String> tokens;
+
+    if (parsedJson['ownerTokens'] == null) {
+      tokens = [];
+    } else {
+      tokens = List<String>.from(parsedJson['ownerTokens']);
+    }
 
     return FeedbackObject(
       feedback: jsonFArray,
@@ -64,6 +74,7 @@ class FeedbackObject {
       senderUsername: parsedJson['senderUsername'],
       id: parsedJson['id'],
       senderProfileImageUrl: parsedJson['senderProfileImageUrl'],
+      senderTokens: tokens,
       timeStamp: parsedJson['timeStamp'],
       ratedTimestamp: parsedJson['ratedTimestamp'],
       timeSpentReviewing: parsedJson['timeSpentReviewing'],
