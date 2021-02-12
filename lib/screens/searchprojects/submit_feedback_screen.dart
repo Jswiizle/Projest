@@ -15,6 +15,7 @@ class SubmitFeedbackScreen extends StatefulWidget {
 
   final ProjectObject p;
   final Function submittedFeedbackCallback;
+
   static int secondsViewed = 0;
   static List<FeedbackCriteriaObject> criteria;
 
@@ -71,12 +72,16 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double b = MediaQuery.of(context).viewInsets.bottom;
+
+    print('Bottom inset is $b)');
+
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 15),
+            padding: EdgeInsets.only(right: 12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: createTimeDisplay(),
@@ -86,63 +91,72 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
         backgroundColor: kPrimaryColor,
         title: Text('Submit Feedback'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
+      body: Padding(
+        padding: EdgeInsets.only(
+            bottom: b != 0 ? MediaQuery.of(context).viewInsets.bottom - 60 : 0),
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Container(
             child: ListView.builder(
-              padding: EdgeInsets.all(10.0),
-              itemCount: SubmitFeedbackScreen.criteria.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.all(10),
+              itemCount: SubmitFeedbackScreen.criteria.length + 1,
               itemBuilder: (context, i) {
-                return Card(
-                  elevation: 2.0,
-                  child: ExpansionTile(
-                    title: Row(
-                      children: <Widget>[
-                        Text(
-                          SubmitFeedbackScreen.criteria[i].criteria,
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w500,
+                if (i != SubmitFeedbackScreen.criteria.length) {
+                  return Card(
+                    elevation: 2.0,
+                    child: ExpansionTile(
+                      title: Row(
+                        children: <Widget>[
+                          Text(
+                            SubmitFeedbackScreen.criteria[i].criteria,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
+                          SizedBox(width: 12.5),
+                        ],
+                      ),
+                      children: <Widget>[
+                        new Column(
+                          children: _buildExpandableContent(
+                              SubmitFeedbackScreen.criteria[i]),
                         ),
-                        SizedBox(width: 12.5),
                       ],
                     ),
-                    children: <Widget>[
-                      new Column(
-                        children: _buildExpandableContent(
-                            SubmitFeedbackScreen.criteria[i]),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: RoundedButton(
-              title: 'Submit',
-              color: kPrimaryColor,
-              onPressed: () async {
-                widget.p.feedbackArray = [];
-                widget.p.feedbackArray.add(createFeedbackObject().toJson());
+                  );
+                } else {
+                  return Padding(
+                    padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
+                    child: RoundedButton(
+                      title: 'Submit',
+                      color: kPrimaryColor,
+                      onPressed: () async {
+                        widget.p.feedbackArray = [];
+                        widget.p.feedbackArray
+                            .add(createFeedbackObject().toJson());
 
-                if (widget.p.ratedByUids == null) {
-                  widget.p.ratedByUids = [];
+                        if (widget.p.ratedByUids == null) {
+                          widget.p.ratedByUids = [];
+                        }
+
+                        widget.p.ratedByUids
+                            .add(FirebaseAuthHelper.loggedInUser.uid);
+                        ViewUserProjectScreen.p = widget.p;
+                        FirestoreHelper helper = FirestoreHelper();
+                        await helper.updateProject(widget.p);
+                        Navigator.pop(context);
+                        widget.submittedFeedbackCallback();
+                      },
+                    ),
+                  );
                 }
-
-                widget.p.ratedByUids.add(FirebaseAuthHelper.loggedInUser.uid);
-                ViewUserProjectScreen.p = widget.p;
-                FirestoreHelper helper = FirestoreHelper();
-                await helper.updateProject(widget.p);
-                Navigator.pop(context);
-                widget.submittedFeedbackCallback();
               },
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -198,18 +212,18 @@ class _SubmitFeedbackScreenState extends State<SubmitFeedbackScreen> {
               textInputAction: TextInputAction.done,
               controller: TextEditingController.fromValue(
                 TextEditingValue(
-                    text: criteriaItem.text,
-                    selection: TextSelection.fromPosition(
-                        TextPosition(offset: criteriaItem.text.length))),
+                  text: criteriaItem.text,
+                  selection: TextSelection.fromPosition(TextPosition(
+                    offset: criteriaItem.text.length,
+                  )),
+                ),
               ),
               decoration: kTextFieldDecoration,
               onChanged: (value) {
                 SubmitFeedbackScreen.criteria[criteriaItem.index].text = value;
               },
             ),
-            SizedBox(
-              height: 15,
-            ),
+            SizedBox(height: 15),
             RatingBar(
               itemCount: 5,
               itemSize: 50,

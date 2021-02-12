@@ -104,6 +104,18 @@ class FirebaseAuthHelper {
     });
   }
 
+  bool isAuthenticated() {
+    bool a;
+
+    if (auth.currentUser == null) {
+      a = false;
+    } else {
+      a = true;
+    }
+
+    return a;
+  }
+
   Future<AuthResultStatus> createAccount({email, pass}) async {
     try {
       final authResult = await auth.createUserWithEmailAndPassword(

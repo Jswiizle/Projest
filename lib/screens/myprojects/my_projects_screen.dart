@@ -27,11 +27,6 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
   bool isLoading = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       child: ModalProgressHUD(
@@ -161,13 +156,13 @@ class _MyProjectsScreenState extends State<MyProjectsScreen> {
                     ),
                     Text(
                       sponsoredText,
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w400),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                     Text(
                       '   =   $creditsToSponsor Credits',
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w400),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),

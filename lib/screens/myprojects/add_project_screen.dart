@@ -308,7 +308,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                 children: [
                   Container(
                     height: 170,
-                    child: CriteriaListview(
+                    child: CriteriaListView(
                       selectedCriteria: selectedCriteria,
                       category: projectCategory,
                       onCriteriaChanged: (criteriaSelected) {
@@ -405,9 +405,10 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       if (settingThumbnail == true) {
         customThumbnail = croppedImage;
       }
-
-      _showProjectCriteriaAndThumbnailPopup();
     });
+
+    Navigator.pop(context);
+    _showProjectCriteriaAndThumbnailPopup();
   }
 
   bool projectIsReady() {
@@ -437,7 +438,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
           .child("${auth.auth.currentUser.uid}/$uuid/thumbnail");
       StorageUploadTask thumbTask = thumbnailRef.putFile(customThumbnail);
 
-      Navigator.pop(context);
+      // Navigator.pop(context);
 
       await thumbTask.onComplete;
       thumbnailUrl = await thumbnailRef.getDownloadURL();

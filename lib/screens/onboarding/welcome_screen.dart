@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:projest/components/buttons/rounded_button.dart';
+import 'package:projest/screens/misc/main_tab_controller.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'package:projest/constants.dart';
+import 'package:projest/main.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
@@ -12,6 +14,21 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkIfAuth();
+    });
+
+    super.initState();
+  }
+
+  void checkIfAuth() {
+    if (Projest.authenticated) {
+      Navigator.pushNamed(context, MainTabController.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -3,18 +3,18 @@ import 'package:projest/components/tiles/criteria_tile.dart';
 import 'package:projest/models/objects/category_object.dart';
 import 'package:projest/models/objects/criteria_object.dart';
 
-class CriteriaListview extends StatefulWidget {
+class CriteriaListView extends StatefulWidget {
   @override
-  _CriteriaListviewState createState() => _CriteriaListviewState();
+  _CriteriaListViewState createState() => _CriteriaListViewState();
 
   final ValueChanged<List<String>> onCriteriaChanged;
   final CategoryObject category;
   List<String> selectedCriteria;
-  CriteriaListview(
+  CriteriaListView(
       {this.onCriteriaChanged, this.category, this.selectedCriteria});
 }
 
-class _CriteriaListviewState extends State<CriteriaListview> {
+class _CriteriaListViewState extends State<CriteriaListView> {
   List<CriteriaObject> criteria = [];
 
   @override
@@ -42,7 +42,12 @@ class _CriteriaListviewState extends State<CriteriaListview> {
   }
 
   void buildCriteriaObjects() {
-    print(widget.category.criteria);
+    criteria.add(CriteriaObject(
+      criteria: 'General',
+      isSelected: true,
+    ));
+
+    widget.selectedCriteria.add('General');
 
     for (String c in widget.category.criteria) {
       criteria.add(CriteriaObject(

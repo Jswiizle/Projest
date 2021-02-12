@@ -5,7 +5,9 @@ class CriteriaObject {
   bool isSelected;
 
   void selectCriteria() {
-    isSelected = !isSelected;
+    if (criteria != 'General') {
+      isSelected = !isSelected;
+    }
   }
 
   Map<String, dynamic> toJson() => {

@@ -22,7 +22,6 @@ const kTextFieldDecoration = InputDecoration(
 );
 
 const kMusicCriteria = [
-  'General',
   'Production',
   'Cultural Relevance',
   'Artistic Purpose',
@@ -41,7 +40,6 @@ const kMusicCriteria = [
 ];
 
 const kArtCriteria = [
-  'General',
   'Creativity',
   'Color',
   'Lighting',
@@ -60,7 +58,6 @@ const kArtCriteria = [
 ];
 
 const kCodingCriteria = [
-  'General',
   'Readability',
   'Maintainability',
   'Efficiency',
@@ -77,7 +74,6 @@ const kCodingCriteria = [
 ];
 
 const kMarketingCriteria = [
-  'General',
   'Trustworthiness',
   'Targeting',
   'Aesthetic Design',
@@ -93,7 +89,6 @@ const kMarketingCriteria = [
 ];
 
 const kPodcastingCriteria = [
-  'General',
   'Production Quality',
   'Subject Matter',
   'Consistent Scheduling',
@@ -113,7 +108,6 @@ const kPodcastingCriteria = [
 ];
 
 const kUiDesignCriteria = [
-  'General',
   'One Task Per Screen',
   'Hierarchical Organization',
   'Use of Color',
@@ -125,7 +119,6 @@ const kUiDesignCriteria = [
 ];
 
 const kVideoCriteria = [
-  'General',
   'Content',
   'Entertainment Value',
   'Clarity of Purpose',
@@ -141,7 +134,6 @@ const kVideoCriteria = [
 ];
 
 const kWritingCriteria = [
-  'General',
   'Organization',
   'Sentence Fluency',
   'Word Choice',

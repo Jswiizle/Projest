@@ -139,8 +139,8 @@ class _MainTabControllerState extends State<MainTabController> {
     if (_currentIndex == 2) {
       return GestureDetector(
         onTap: () async {
-          Navigator.of(context).popUntil((route) => route.isFirst);
           await FirebaseAuthHelper().logout();
+          Navigator.of(context).popUntil((route) => route.isFirst);
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 15),

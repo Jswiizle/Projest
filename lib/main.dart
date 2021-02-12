@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:projest/helpers/firebase_helper.dart';
 import 'package:projest/screens/profile/settings_screen.dart';
 import 'screens/myprojects/add_project_screen.dart';
 import 'screens/searchprojects/view_user_project_screen.dart';
@@ -15,10 +16,18 @@ import 'screens/projectcontent/webcontent.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Projest.authenticated = FirebaseAuthHelper().isAuthenticated();
+
+  if (Projest.authenticated) {
+    await FirebaseAuthHelper().setCurrentUser();
+  }
+
   runApp(Projest());
 }
 
 class Projest extends StatelessWidget {
+  static bool authenticated;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,11 +67,14 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   }
 }
 
+//NEXT UPDATE
+
+//TODO: Fix typing on submit feedback screen
+//TODO: Add zoom in for photos while viewing
+
 //IMMEDIATE BUG FIXES
 
 //MASTER TO_DO
-
-//TODO: - Import the old firebase database
 
 //TODO: - (V-1.1) - Add support for tablets
 //TODO: - (V-1.1) - Display version in the settings screen

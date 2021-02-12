@@ -46,8 +46,6 @@ class _ViewProjectContentScreenState extends State<ViewProjectContentScreen> {
   }
 
   void configureScreen() {
-    print('Config called');
-
     if (project == null) {
       project = widget.p;
     }
@@ -69,7 +67,6 @@ class _ViewProjectContentScreenState extends State<ViewProjectContentScreen> {
 
   @override
   void dispose() {
-    print('Dispose View Project Content Screen called');
     SubmitFeedbackScreen.secondsViewed = 0;
     SubmitFeedbackScreen.criteria = null;
 
@@ -83,8 +80,6 @@ class _ViewProjectContentScreenState extends State<ViewProjectContentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Build called');
-
     return ModalProgressHUD(
       inAsyncCall: loading,
       child: Column(
